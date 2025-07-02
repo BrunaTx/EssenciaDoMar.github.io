@@ -1,0 +1,109 @@
+/* Estilo geral da página */
+body {
+    font-family: American Typewriter, serif;
+    background-color: #9ab991;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+  
+  /* Imagem principal (logo central) */
+  .img {
+    width: 14%;
+    border-radius: 100%;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  /* Imagens decorativas da esquerda e direita */
+  .img2 {
+    position: absolute;
+    width: 27%;
+    border-radius: 100%;
+    top: 33%;
+    right: 78%;
+    opacity: 0.3;
+    z-index: 0;
+  }
+  
+  .img3 {
+    position: absolute;
+    width: 20%;
+    border-radius: 100%;
+    bottom: 52%;
+    left: 84%;
+    opacity: 0.3;
+    z-index: 0;
+    transform: rotate(180deg) rotate(5deg);
+  }
+  
+  /* Container central que organiza inputs e botão */
+  .conteudo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    z-index: 1;
+  }
+  
+  /* Título com link de entrar */
+  h1 {
+    color: #2a5554;
+    font-size: 80px;
+    margin-top: 5%;
+  }
+  
+  .link {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .link:hover {
+    color: #d6e4da;
+  }
+  
+  /* Container dos campos de entrada */
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 23%;
+  }
+  
+  /* Caixa de input (com fundo, sombra, etc.) */
+  .input-box {
+    background-color: #d6e4da;
+    border-radius: 15px;
+    padding: 20px 30px;
+    width: 320px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    font-size: 18px;
+    text-align: center;
+   
+  }
+  
+  /* Rótulo de cada campo */
+  .input-box label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 20px;
+    color: #2a5554;
+    
+  }
+  
+  /* Campo de entrada em si */
+  .input-box input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #aaa;
+    box-sizing: border-box;
+  }
