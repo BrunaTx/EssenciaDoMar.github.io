@@ -1,9 +1,14 @@
-import React from 'react';
-import Principal from './pages/Principal/principal';
+import { Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import Principal from './pages/Principal';
 
 function App() {
   return (
-    <Principal />
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/principal" element={<Principal />} />
+      <Route path="/" element={<Principal />} />
+    </Routes>
   );
 }
 

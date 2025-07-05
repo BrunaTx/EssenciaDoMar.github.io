@@ -1,4 +1,3 @@
-/* Estilo geral da página */
 body {
     font-family: American Typewriter, serif;
     background-color: #9ab991;
@@ -8,7 +7,6 @@ body {
     overflow-x: hidden;
   }
   
-  /* Imagem principal (logo central) */
   .img {
     width: 14%;
     border-radius: 100%;
@@ -18,7 +16,7 @@ body {
     transform: translateX(-50%);
   }
   
-  /* Imagens decorativas da esquerda e direita */
+
   .img2 {
     position: absolute;
     width: 27%;
@@ -40,7 +38,7 @@ body {
     transform: rotate(180deg) rotate(5deg);
   }
   
-  /* Container central que organiza inputs e botão */
+ 
   .conteudo {
     display: flex;
     flex-direction: column;
@@ -50,7 +48,7 @@ body {
     z-index: 1;
   }
   
-  /* Título com link de entrar */
+
   h1 {
     color: #2a5554;
     font-size: 80px;
@@ -67,7 +65,7 @@ body {
     color: #d6e4da;
   }
   
-  /* Container dos campos de entrada */
+ 
   .input-container {
     display: flex;
     flex-direction: column;
@@ -76,7 +74,7 @@ body {
     margin-top: 23%;
   }
   
-  /* Caixa de input (com fundo, sombra, etc.) */
+  
   .input-box {
     background-color: #d6e4da;
     border-radius: 15px;
@@ -88,7 +86,7 @@ body {
    
   }
   
-  /* Rótulo de cada campo */
+ 
   .input-box label {
     display: block;
     font-weight: bold;
@@ -98,7 +96,7 @@ body {
     
   }
   
-  /* Campo de entrada em si */
+   
   .input-box input {
     width: 100%;
     padding: 10px;
