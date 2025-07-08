@@ -22,6 +22,12 @@
   .principal-link:hover {
     color: #d6e4da;
   }
+
+  .principal-lin {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+  }
   
   .principal-card {
     color: #2a5554;

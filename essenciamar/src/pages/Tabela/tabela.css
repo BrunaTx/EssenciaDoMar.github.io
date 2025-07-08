@@ -1,0 +1,175 @@
+/* Estilo base */
+body {
+    background-color: #9ab991;
+    font-family: 'American Typewriter', serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+  }
+  
+  /* Conteúdo geral */
+  .conteudo {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Cabeçalho */
+  header {
+    background-color: #2a5554;
+    padding: 16px;
+    width: 100%; 
+  }
+  
+  .titulo-principal {
+    font-size: 60px;
+    color: white;
+    margin: 0;
+  }
+  
+
+  .subtitulo {
+    font-size: 18px;
+    text-align: center;
+    margin: 20px 0;
+    color: white
+  }
+  
+  /* Tabela de produtos */
+  .tabela-custom {
+    width: 100%;
+ 
+
+    margin-bottom: 30px;
+    background-color: #9ab991;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  /* Cabeçalho da tabela */
+  .tabela-custom th {
+    background-color: #2a5554;
+    color: white;
+    padding: 12px;
+    text-align: center;
+  }
+  
+  /* Células */
+  .tabela-custom td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+  }
+  
+  /* Linhas alternadas: branco e verde claro */
+  .tabela-custom tbody tr:nth-child(even) {
+    background-color: #e0f0e0;
+  }
+  
+  .tabela-custom tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+  }
+  
+  /* Botões de ação na tabela */
+  .btn-edit,
+  .btn-remove {
+    padding: 6px 12px;
+    margin: 0 4px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-edit {
+    background-color: #ffc107;
+    color: #000;
+  }
+  
+  .btn-edit:hover {
+    background-color: #ffca2c;
+  }
+  
+  .btn-remove {
+    background-color: #dc3545;
+    color: #fff;
+  }
+  
+  .btn-remove:hover {
+    background-color: #bb2d3b;
+  }
+  
+  /* Botões de controle */
+  nav.controles {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .btn-primario {
+    background-color: #198754;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-primario:hover {
+    background-color: #157347;
+  }
+  
+  .btn-secundario {
+    background-color: #2a5554;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-secundario:hover {
+    background-color: #1e4645;
+  }
+  
+  /* Rodapé */
+  footer {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: auto;
+  }
+
+  .campo-pesquisa {
+    display: block;
+    margin: 0 auto 20px auto;
+    padding: 10px 14px;
+    width: 60%;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  .btn-info {
+    background-color: #0dcaf0;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    margin: 0 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-info:hover {
+    background-color: #31d2f2;
+  }
+  
+  
+  
