@@ -13,9 +13,7 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     
-    // Verificação das credenciais
     if (email === 'brulyz14@gmail.com' && password === 'brulyz30') {
-      // Login bem-sucedido - redireciona para /principal
       navigate('/tabela');
     } else {
       setError('Email ou senha incorretos');

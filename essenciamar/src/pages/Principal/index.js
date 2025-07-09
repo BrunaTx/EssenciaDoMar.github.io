@@ -7,7 +7,7 @@ function Principal() {
   return (
     <div className="principal-container">
       <h1 className="principal-title">
-        <Link to="/login" className="principal-link">Entrar</Link> {/* Link para a página de login */}
+        <Link to="/login" className="principal-link">Entrar</Link> 
       </h1>
         <div className="principal-card">
         <p>Este projeto de Desenvolvimento Web é inspirado na loja Essência do Mar, especializada em produtos naturais e localizada 

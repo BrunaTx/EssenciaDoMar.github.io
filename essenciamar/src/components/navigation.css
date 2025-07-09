@@ -1,3 +1,12 @@
+ @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+  font-family: 'Material Symbols Outlined';
+  color: white;
+}
+
+
 .navigationbar {
   width: 100%;
   background-color: #2a5554;
@@ -11,13 +20,40 @@
 }
 
 .campo-pesquisa {
-  flex:  300px;
   padding: 10px 14px;
   border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-  max-width: 400px;
+  border: 1px solid #2a5554; 
+  font-size: 20px;
+  max-width: 500px;
 }
+
+
+.material-symbols-outlined.btn-pesquisa {
+  font-size: 35px;
+  margin-left: 5px;
+  margin-bottom: 10px;
+}
+
+.btn-venda span {
+  margin-left: 20px;
+}
+
+
+.btn-mais span {
+  margin-left: 20px;
+}
+
+.btn-venda .material-symbols-outlined,
+.btn-mais .material-symbols-outlined,
+.btn-pesquisa {
+  font-size: 32px; 
+}
+
+.btn-venda .material-symbols-outlined,
+.btn-mais .material-symbols-outlined {
+  margin-left: 10px; 
+}
+
 
 .controles {
   display: flex;
@@ -26,31 +62,26 @@
 }
 
 .btn-primario {
-  background-color: #198754;
+  background-color: #9ab991;
   color: white;
-  border: none;
-  padding: 10px 20px;
   border-radius: 6px;
-  font-weight: bold;
+  border: none;
   cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.btn-primario:hover {
-  background-color: #157347;
+  font-size: 20px;
+  padding: 7px 50px;
+   font-family: American Typewriter, serif;
 }
 
 .btn-secundario {
-  background-color: #0d6efd;
+  background-color: #9ab991;
   color: white;
-  border: none;
-  padding: 10px 20px;
+  padding: 7px 50px;
   border-radius: 6px;
-  font-weight: bold;
+  border: none;
   cursor: pointer;
-  transition: background-color 0.3s;
+  font-size: 20px;
+   font-family: American Typewriter, serif;
+  
 }
 
-.btn-secundario:hover {
-  background-color: #084cd9;
-}
+

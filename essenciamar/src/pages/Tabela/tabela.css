@@ -1,175 +1,121 @@
-/* Estilo base */
+ @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+  font-family: 'Material Symbols Outlined';
+  font-size: 24px;
+  color: white;
+  vertical-align: middle;
+}
+
 body {
-    background-color: #9ab991;
-    font-family: 'American Typewriter', serif;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-  }
-  
-  /* Conteúdo geral */
-  .conteudo {
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  
-  /* Cabeçalho */
-  header {
-    background-color: #2a5554;
-    padding: 16px;
-    width: 100%; 
-  }
-  
-  .titulo-principal {
-    font-size: 60px;
-    color: white;
-    margin: 0;
-  }
-  
+  background-color: #9ab991;
+  font-family: 'American Typewriter', serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
 
-  .subtitulo {
-    font-size: 18px;
-    text-align: center;
-    margin: 20px 0;
-    color: white
-  }
-  
-  /* Tabela de produtos */
-  .tabela-custom {
-    width: 100%;
+}
+
+.tabela-container {
+  background-color: #9ab991; 
+  font-family: 'American Typewriter', serif;
+  min-height: 100vh;
+}
+
+
+header {
+  background-color: #2a5554;
+  padding: 15px;
+  width: 100%; 
+  margin-bottom: auto;
+}
+
+
+.titulo-principal {
+  font-size: 60px;
+  color: white;
+  margin: 0;
+}
+
+.tabela-custom {
+  width: 100%;
+  margin-bottom: 30px;
+  background-color: #9ab991;
+  border-collapse: collapse;
+}
+
+.tabela-custom th {
+  background-color: #2a5554;
+  color: white;
+  padding: 12px;
+  text-align: center;
+  border: 2px solid white;
+}
+
+.tabela-custom td {
+  padding: 12px;
+  text-align: center;
+  color: white;
+  border: 2px solid white;
+
+
+}
+
+.tabela-custom tbody tr:nth-child(even) {
+  background-color: #9ab991;
+}
+
+.tabela-custom tbody tr:nth-child(odd) {
+  background-color: #2a5554;
+}
+
+
+.btn-edit,
+.btn-remove,
+.btn-info {
+  border: none;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 4px;
+}
+
+
+.modal-header { 
+  color: white;
+  border-bottom: 2px solid #1f433f;
+}
+
+.modal-title {
+  font-family: 'American Typewriter', serif;
+  font-weight: bold;
+  color:#2a5554;
+  font-size: 35px;
+  margin-left: 50px;
+}
+
+
+.modal-body {
+  font-family: 'American Typewriter', serif;
+  font-size: 20px;
+  color: #2a5554;
+  padding: 20px;
  
+}
 
-    margin-bottom: 30px;
-    background-color: #9ab991;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  }
-  
-  /* Cabeçalho da tabela */
-  .tabela-custom th {
-    background-color: #2a5554;
-    color: white;
-    padding: 12px;
-    text-align: center;
-  }
-  
-  /* Células */
-  .tabela-custom td {
-    padding: 12px;
-    text-align: center;
-    border: 1px solid #dee2e6;
-  }
-  
-  /* Linhas alternadas: branco e verde claro */
-  .tabela-custom tbody tr:nth-child(even) {
-    background-color: #e0f0e0;
-  }
-  
-  .tabela-custom tbody tr:nth-child(odd) {
-    background-color: #ffffff;
-  }
-  
-  /* Botões de ação na tabela */
-  .btn-edit,
-  .btn-remove {
-    padding: 6px 12px;
-    margin: 0 4px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .btn-edit {
-    background-color: #ffc107;
-    color: #000;
-  }
-  
-  .btn-edit:hover {
-    background-color: #ffca2c;
-  }
-  
-  .btn-remove {
-    background-color: #dc3545;
-    color: #fff;
-  }
-  
-  .btn-remove:hover {
-    background-color: #bb2d3b;
-  }
-  
-  /* Botões de controle */
-  nav.controles {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-  
-  .btn-primario {
-    background-color: #198754;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .btn-primario:hover {
-    background-color: #157347;
-  }
-  
-  .btn-secundario {
-    background-color: #2a5554;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .btn-secundario:hover {
-    background-color: #1e4645;
-  }
-  
-  /* Rodapé */
-  footer {
-    text-align: center;
-    padding: 20px 0;
-    margin-top: auto;
-  }
+.descricao-container {
+  background-color: #9ab991; 
+  border-radius: 8px;
+  padding: 15px;
+  color: #2a5554;
+  font-family: 'American Typewriter', serif;
+  font-size: 1rem;
+}
 
-  .campo-pesquisa {
-    display: block;
-    margin: 0 auto 20px auto;
-    padding: 10px 14px;
-    width: 60%;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-  }
-  .btn-info {
-    background-color: #0dcaf0;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    margin: 0 4px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
   
-  .btn-info:hover {
-    background-color: #31d2f2;
-  }
+  
   
   
   
