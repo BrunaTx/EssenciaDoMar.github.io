@@ -18,7 +18,7 @@ const NavigationBar = ({ filtro, setFiltro }) => {
 
       <div className="controles">
         <button className="btn-primario btn-venda">
-         <Link to="/cadastro" className="principal-link">Controle de Venda</Link>
+         <Link to="/controle" className="principal-link">Controle de Venda</Link>
           <span className="material-symbols-outlined">order_approve</span>
         </button>
         <button className="btn-secundario btn-mais">

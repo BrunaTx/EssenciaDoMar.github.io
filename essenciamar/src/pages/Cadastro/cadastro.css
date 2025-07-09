@@ -13,7 +13,7 @@
   flex-direction: column;
   align-items: center;
   overflow-y: auto;
-  padding-top: 140px; 
+  padding-top: 140px; /* maior para dar espaço ao título absoluto */
 }
 
 
@@ -41,21 +41,14 @@
 .cadastrar {
   position: absolute;
   bottom: 20px; 
-  left: 11%; 
+  left: 12%; 
   font-size: 80px;
   color: #2a5554;
   font-weight: bold;
   font-family: 'American Typewriter', serif;
 }
 
-.erro-aviso {
-  color: #2a5554;         
-  font-family: 'American Typewriter', serif;
-  font-weight: normal;
-  font-size: 18px;         
-  margin-top: 2px;
-  margin-bottom: 15px;    
-}
+
 
 .grid-esquerda input,
 .grid-esquerda select {

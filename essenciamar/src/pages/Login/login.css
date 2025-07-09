@@ -4,7 +4,7 @@ body {
   text-align: center;
   margin: 0;
   padding: 0;
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 
 .img {
@@ -15,6 +15,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
 }
+
 
 .img2 {
   position: absolute;
@@ -93,7 +94,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Estilos adicionados do componente */
 .erro-messagem {
   color: #2a5554;
   text-align: center;
@@ -101,7 +101,6 @@ body {
   font-family: American Typewriter, serif;
 }
 
-/* Estilo para o botão de login (substituindo o .link original) */
 .login-button {
   color: #2a5554;
   font-size: 80px;

@@ -5,6 +5,7 @@ import './tabela.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Modal } from 'bootstrap';
+import { Link } from 'react-router-dom';
 
 const Tabela = () => {
   const location = useLocation();
@@ -14,30 +15,45 @@ const Tabela = () => {
       produto: 'Óleo Essencial', 
       preco: 'R$ 10,99', 
       estoque: '50 unidades',
-      descricao: 'Óleo Essencial de Lavanda – 10ml. Óleo 100% puro e natural...'
+      descricao: 'Óleo Essencial de Lavanda – 10ml. Óleo 100% puro e natural, com aroma suave e floral. Ideal para relaxar, aliviar o estresse e promover o bem-estar. Pode ser usado em difusores, massagens (diluído) ou banhos. Extraído das flores por destilação a vapor.'
     },
-  { 
-    id: 2, 
-    produto: 'Sabonete Natural', 
-    preco: 'R$ 5,99', 
-    estoque: '30 unidades',
-    descricao: 'Sabonete feito com ingredientes naturais, suave para a pele e biodegradável.'
-  },
-  { 
-    id: 3, 
-    produto: 'Creme Hidratante', 
-    preco: 'R$ 15,99', 
-    estoque: '25 unidades',
-    descricao: 'Creme hidratante com propriedades nutritivas para manter sua pele macia e saudável.'
-  }
-]);
+    { 
+      id: 2, 
+      produto: 'Sabonete Natural', 
+      preco: 'R$ 5,99', 
+      estoque: '30 unidades',
+      descricao: 'Sabonete feito com ingredientes naturais, suave para a pele e biodegradável.'
+    },
+    { 
+      id: 3, 
+      produto: 'Creme Hidratante', 
+      preco: 'R$ 15,99', 
+      estoque: '25 unidades',
+      descricao: 'Creme hidratante com propriedades nutritivas para manter sua pele macia e saudável.'
+    },
+    { 
+      id: 4, 
+      produto: 'Castanha', 
+      preco: 'R$ 15,99', 
+      estoque: ' 3Kg',
+      descricao: 'Creme hidratante com propriedades nutritivas para manter sua pele macia e saudável.'
+    }
 
- useEffect(() => {
-    if (location.state && location.state.novoProduto) {
-      setTasks([...tasks, location.state.novoProduto]);
+  ]);
+
+  useEffect(() => {
+    if (location.state) {
+      if (location.state.novoProduto) {
+        // Adiciona novo produto
+        setTasks([...tasks, location.state.novoProduto]);
+      } else if (location.state.produtoEditado) {
+        // Atualiza produto existente
+        setTasks(tasks.map(task => 
+          task.id === location.state.produtoEditado.id ? location.state.produtoEditado : task
+        ));
+      }
     }
   }, [location.state]);
-
 
   const [filtro, setFiltro] = useState('');
 
@@ -53,21 +69,20 @@ const Tabela = () => {
   );
 
   const mostrarMaisInfo = (produto) => {
-  const modalElement = document.getElementById('exampleModal');
-  modalElement.querySelector('.modal-body').innerHTML = `
-    <div class="descricao-container">
-      <p><strong>Produto:</strong> ${produto.produto}</p>
-      <p><strong>Preço:</strong> ${produto.preco}</p>
-      <p><strong>Estoque:</strong> ${produto.estoque}</p>
-      <p><strong>Descrição:</strong></p>
-      <p>${produto.descricao}</p>
-    </div>
-  `;
+    const modalElement = document.getElementById('exampleModal');
+    modalElement.querySelector('.modal-body').innerHTML = `
+      <div class="descricao-container">
+        <p><strong>Produto:</strong> ${produto.produto}</p>
+        <p><strong>Preço:</strong> ${produto.preco}</p>
+        <p><strong>Estoque:</strong> ${produto.estoque}</p>
+        <p><strong>Descrição:</strong></p>
+        <p>${produto.descricao}</p>
+      </div>
+    `;
 
-  const modal = new Modal(modalElement);
-  modal.show();
-};
-
+    const modal = new Modal(modalElement);
+    modal.show();
+  };
 
   return (
     <div className="tabela-container">
@@ -93,9 +108,14 @@ const Tabela = () => {
               <td>{task.preco}</td>
               <td>{task.estoque}</td>
               <td>
-                <button className="btn-edit" title="Editar">
+                <Link 
+                  to="/edicao" 
+                  state={{ produtoParaEditar: task }}
+                  className="btn-edit" 
+                  title="Editar"
+                >
                   <span className="material-symbols-outlined">edit</span>
-                </button>
+                </Link>
                 <button className="btn-remove" onClick={() => removeTask(task.id)} title="Remover">
                   <span className="material-symbols-outlined">delete</span>
                 </button>
@@ -127,16 +147,13 @@ const Tabela = () => {
                 data-bs-dismiss="modal"
                 aria-label="Fechar"
               ></button>
-              </div>
-            <div className="modal-body">
-          
             </div>
+            <div className="modal-body"></div>
           </div>
         </div>
       </div>
     </div>
   );
 };
-
 
 export default Tabela;

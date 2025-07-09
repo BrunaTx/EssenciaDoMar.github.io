@@ -61,14 +61,13 @@ function Cadastro() {
       estoque: tipoMedida === 'unidade' ? `${quantidadeUnidade} unidades` : `${pesoKg} Kg`,
     };
 
-    // Limpar os campos após o cadastro
     setPreco('');
     setNome('');
     setDescricao('');
     setQuantidadeUnidade('');
     setPesoKg('');
 
-    // Navegar para a tabela com o novo produto
+
     navigate('/tabela', { state: { novoProduto } });
   };
 
@@ -76,9 +75,6 @@ function Cadastro() {
     <div className="principal-container">
       <div className="grid-esquerda">
         <h1 className="novo-produto">Novo Produto</h1>
-
- <h1 className="novo-produto">Novo Produto</h1>
-
         <input
           type="text"
           placeholder="Preço:"
@@ -136,8 +132,6 @@ function Cadastro() {
             />
           </>
         )}
-
-        {/* Mensagem de erro estilizada igual inputs */}
         {erro && <p className="erro-aviso">{erro}</p>}       
          <h1 className="cadastrar" onClick={handleCadastrar} style={{ cursor: 'pointer' }}>
           Cadastrar

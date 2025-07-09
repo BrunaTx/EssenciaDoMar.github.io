@@ -12,8 +12,9 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    
+    setError('');
     if (email === 'brulyz14@gmail.com' && password === 'brulyz30') {
+
       navigate('/tabela');
     } else {
       setError('Email ou senha incorretos');
