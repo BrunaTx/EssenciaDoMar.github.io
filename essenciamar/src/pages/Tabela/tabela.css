@@ -114,6 +114,85 @@ header {
   font-size: 1rem;
 }
 
+#modalCarrinho .modal-content {
+  background-color:#9ab991; 
+  border: 3px solid white;
+  border-radius: 12px;
+}
+
+#modalCarrinho .modal-header {
+  background-color: white;
+}
+
+#modalCarrinho .modal-title {
+  font-family: 'American Typewriter', serif;
+  font-weight: bold;
+  color: #2a5554;
+  font-size: 30px;
+  margin-left:70px;
+}
+
+#modalCarrinho .modal-body {
+  font-family: 'American Typewriter', serif;
+  font-size: 18px;
+  color: #2a5554;
+  padding: 20px;
+}
+
+#modalCarrinho .modal-body label {
+  font-weight: bold;
+  color: #2a5554;
+  margin-top: 10px;
+}
+
+#modalCarrinho .modal-body input.form-control {
+  background-color: #f0f7f2;
+  border-radius: 10px;
+  border: 1px solid #2a5554;
+  color: #2a5554;
+  font-size: 16px;
+  font-family: 'American Typewriter', serif;
+}
+
+#modalCarrinho .modal-footer {
+  background-color: #9ab991; 
+  border-top: 2px solid #9ab991; 
+  background-color: #9ab991; 
+}
+
+#modalCarrinho .modal-footer .btn {
+  font-family: 'American Typewriter', serif;
+  font-size: 16px;
+  padding: 8px 20px;
+  border-radius: 8px;
+}
+
+#modalCarrinho .btn-success {
+  background-color: #2a5554;
+  border: none;
+}
+
+#modalCarrinho .btn-success:hover {
+  background-color: #1f433f;
+}
+
+#modalCarrinho .btn-secondary {
+  background-color:#2a5554;;
+  color: white;
+  border: none;
+}
+
+.erro-aviso {
+  color: #2a5554;         
+  font-family: 'American Typewriter', serif;
+  font-weight: normal;
+  font-size: 18px;    
+  margin-top: 2px;
+  margin-bottom: 15px;    
+}
+
+
+
   
   
   

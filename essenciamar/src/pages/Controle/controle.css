@@ -3,18 +3,21 @@
   display: grid;
   grid-template-columns: 50% 50%;
   height: 100vh;
+
   margin: 0;
   padding: 0;
   position: relative;
 }
 
 .grid-esquerda {
+  position: relative;
   background-color: #9ab991;
   display: flex; 
   flex-direction: column;
   align-items: center;
+  margin-top: -150px; 
   overflow-y: auto;
-  padding: 20px 20px 80px 20px; 
+  padding: 0 20px 80px 20px; /* zero topo para colar no topo */  
 }
 
 .grid-direita {
@@ -32,6 +35,8 @@
 position: relative;
   white-space: nowrap;
   left: 0;
+
+  margin: 0;
   font-size: 75px;
   display: inline;
   color: #2a5554;
@@ -101,8 +106,11 @@ position: relative;
 
 .botoes-container {
   display: flex;
+  justify-content: flex-end; 
   gap: 10px;
+  padding-right: 100px; 
 }
+
 
 .botoes-container button {
   flex: 1;

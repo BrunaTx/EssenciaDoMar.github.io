@@ -13,7 +13,7 @@
   flex-direction: column;
   align-items: center;
   overflow-y: auto;
-  padding-top: 140px; /* maior para dar espaço ao título absoluto */
+  padding-top: 180px !important;  /* maior para dar espaço ao título absoluto */
 }
 
 
@@ -25,13 +25,13 @@
   height: 100vh;  
   width: 100%;    
   margin: 0;
-  padding: 0;
+  
 }
 
 .novo-produto {
   position: absolute;
   top: 20px; 
-  left: 84px; 
+  left: 115px; 
   font-size: 80px;
   color: #2a5554;
   font-weight: bold;
@@ -40,7 +40,7 @@
 
 .cadastrar {
   position: absolute;
-  bottom: 20px; 
+  bottom: 80px; 
   left: 12%; 
   font-size: 80px;
   color: #2a5554;
@@ -69,6 +69,7 @@
 .grid-esquerda input::placeholder {
   color: #2a5554;
   font-weight: normal;
+  
 }
 
 .grid-esquerda label {
@@ -76,4 +77,5 @@
   color: #2a5554;
   font-family: 'American Typewriter', serif;
   font-weight: normal;
+  margin-top: 30px;
 }

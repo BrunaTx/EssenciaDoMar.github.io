@@ -11,68 +11,15 @@ function Controle() {
   const [vendasFiltradas, setVendasFiltradas] = useState([]);
   const [todasVendas, setTodasVendas] = useState([]);
 
+  // Carrega vendas do localStorage ao montar o componente
   useEffect(() => {
-    const vendasExemplo = [
-      {
-        id: 1,
-        data: '2023-10-01',
-        produtos: [
-          { 
-            nome: 'Óleo Essencial', 
-            quantidade: 2, 
-            tipo: 'unidade', 
-            valorUnitario: 10.99,
-            descricao: 'Óleo Essencial de Lavanda – 10ml'
-          },
-          { 
-            nome: 'Castanha', 
-            quantidade: 0.5, 
-            tipo: 'kg', 
-            valorUnitario: 15.99,
-            descricao: 'Castanha do Pará'
-          }
-        ]
-      },
-      {
-        id: 2,
-        data: '2023-10-02',
-        produtos: [
-          { 
-            nome: 'Sabonete Natural', 
-            quantidade: 3, 
-            tipo: 'unidade', 
-            valorUnitario: 5.99,
-            descricao: 'Sabonete natural de ervas'
-          },
-          { 
-            nome: 'Castanha', 
-            quantidade: 1.2, 
-            tipo: 'kg', 
-            valorUnitario: 15.99,
-            descricao: 'Castanha do Pará'
-          }
-        ]
-      },
-      {
-        id: 3,
-        data: '2023-10-03',
-        produtos: [
-          { 
-            nome: 'Creme Hidratante', 
-            quantidade: 1, 
-            tipo: 'unidade', 
-            valorUnitario: 15.99,
-            descricao: 'Creme hidratante corporal'
-          }
-        ]
-      }
-    ];
-
-    setTodasVendas(vendasExemplo);
-    setVendasFiltradas(vendasExemplo);
-    calcularTotal(vendasExemplo);
+    const vendasSalvas = JSON.parse(localStorage.getItem('vendas')) || [];
+    setTodasVendas(vendasSalvas);
+    setVendasFiltradas(vendasSalvas);
+    calcularTotal(vendasSalvas);
   }, []);
 
+  // Função para calcular total geral
   const calcularTotal = (vendas) => {
     const total = vendas.reduce((acc, venda) => {
       const totalVenda = venda.produtos.reduce((totalProd, produto) => {
@@ -83,6 +30,7 @@ function Controle() {
     setTotalVendas(total);
   };
 
+  // Função para filtrar vendas por intervalo de datas
   const filtrarVendas = () => {
     if (!dataInicial || !dataFinal) {
       setErro('Por favor, informe ambas as datas para filtrar.');
@@ -104,6 +52,7 @@ function Controle() {
     calcularTotal(vendasFilt);
   };
 
+  // Limpar filtro e mostrar todas as vendas
   const limparFiltro = () => {
     setDataInicial('');
     setDataFinal('');
@@ -112,6 +61,7 @@ function Controle() {
     setErro('');
   };
 
+  // Formatação de quantidade
   const formatarQuantidade = (produto) => {
     if (produto.tipo === 'kg') {
       return `${produto.quantidade} kg`;
@@ -120,6 +70,7 @@ function Controle() {
     }
   };
 
+  // Formatação de valor unitário
   const formatarValorUnitario = (produto) => {
     if (produto.tipo === 'kg') {
       return `R$ ${produto.valorUnitario.toFixed(2)}/kg`;
@@ -166,10 +117,7 @@ function Controle() {
         {erro && <p className="erro-aviso">{erro}</p>}
 
         <div className="lista-vendas">
-          <h2>Histórico de Vendas</h2>
-          {vendasFiltradas.length === 0 ? (
-            <p>Nenhuma venda encontrada no período selecionado.</p>
-          ) : (
+          <h2>Histórico de Vendas</h2> 
             <ul>
               {vendasFiltradas.map(venda => (
                 <li key={venda.id} className="venda-item">
@@ -181,7 +129,6 @@ function Controle() {
                     {venda.produtos.map((produto, index) => (
                       <li key={index}>
                         <div className="produto-nome">{produto.nome}</div>
-                        <div className="produto-descricao">{produto.descricao}</div>
                         <div className="produto-detalhes">
                           {formatarQuantidade(produto)} - {formatarValorUnitario(produto)} - Total: R$ {(produto.quantidade * produto.valorUnitario).toFixed(2)}
                         </div>
@@ -191,7 +138,6 @@ function Controle() {
                 </li>
               ))}
             </ul>
-          )}
         </div>
 
         <h1 className="voltar" onClick={() => navigate('/tabela')}>

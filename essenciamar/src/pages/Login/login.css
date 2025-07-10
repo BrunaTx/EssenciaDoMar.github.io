@@ -1,6 +1,6 @@
 body {
   font-family: American Typewriter, serif;
-  background-color: #9ab991;
+  background-color: #9ab991 !important;
   text-align: center;
   margin: 0;
   padding: 0;
@@ -16,13 +16,12 @@ body {
   transform: translateX(-50%);
 }
 
-
 .img2 {
   position: absolute;
   width: 27%;
   border-radius: 100%;
-  top: 27%;
-  right: 75%;
+  top: 30%;
+  right: 77%;
   opacity: 0.3;
   z-index: 0;
 }
@@ -32,7 +31,7 @@ body {
   width: 20%;
   border-radius: 100%;
   bottom: 52%;
-  left: 84%;
+  left: 81%;
   opacity: 0.3;
   z-index: 0;
   transform: rotate(180deg) rotate(5deg);
@@ -94,6 +93,7 @@ body {
   box-sizing: border-box;
 }
 
+/* Estilos adicionados do componente */
 .erro-messagem {
   color: #2a5554;
   text-align: center;
@@ -101,6 +101,7 @@ body {
   font-family: American Typewriter, serif;
 }
 
+/* Estilo para o botão de login (substituindo o .link original) */
 .login-button {
   color: #2a5554;
   font-size: 80px;
