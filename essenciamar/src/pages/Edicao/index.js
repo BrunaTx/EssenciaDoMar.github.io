@@ -1,6 +1,109 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import './edicao.css';
+import styled from 'styled-components';
+import logoBackground from './logo.jpg'; 
+
+
+const PrincipalContainer = styled.div`
+  font-family: 'American Typewriter', serif;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+`;
+
+const GridEsquerda = styled.div`
+  background-color: #9ab991;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  padding-top: 140px;
+`;
+
+const GridDireita = styled.div`
+   background-image: url(${logoBackground});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+`;
+
+const EditarProdutoTitle = styled.h1`
+  position: absolute;
+  top: 20px;
+  left: 84px;
+  font-size: 80px;
+  color: #2a5554;
+  font-weight: bold;
+  font-family: 'American Typewriter', serif;
+`;
+
+const SalvarButton = styled.h1`
+  position: absolute;
+  bottom: 20px;
+  left: 16%;
+  font-size: 80px;
+  color: #2a5554;
+  font-weight: bold;
+  font-family: 'American Typewriter', serif;
+  cursor: pointer;
+`;
+
+const ErroAviso = styled.p`
+  color: #2a5554;
+  font-family: 'American Typewriter', serif;
+  font-weight: normal;
+  font-size: 18px;
+  margin-top: 2px;
+  margin-bottom: 15px;
+`;
+
+const InputEstilizado = styled.input`
+  width: 320px;
+  padding: 10px 15px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: none;
+  background-color: #d6e4da;
+  color: #2a5554;
+  box-sizing: border-box;
+  outline: none;
+  cursor: pointer;
+  margin: 2px 0 7px 0;
+  font-family: 'American Typewriter', serif;
+
+  &::placeholder {
+    color: #2a5554;
+    font-weight: normal;
+  }
+`;
+
+const SelectEstilizado = styled.select`
+  width: 320px;
+  padding: 10px 15px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: none;
+  background-color: #d6e4da;
+  color: #2a5554;
+  box-sizing: border-box;
+  outline: none;
+  cursor: pointer;
+  margin: 2px 0 7px 0;
+  font-family: 'American Typewriter', serif;
+`;
+
+const LabelEstilizado = styled.label`
+  display: block;
+  color: #2a5554;
+  font-family: 'American Typewriter', serif;
+  font-weight: normal;
+`;
 
 function Edicao() {
   const navigate = useNavigate();
@@ -87,43 +190,43 @@ function Edicao() {
   };
 
   return (
-    <div className="principal-container">
-      <div className="grid-esquerda">
-        <h1 className="editar-produto">Editar Produto</h1>
+    <PrincipalContainer>
+      <GridEsquerda>
+        <EditarProdutoTitle>Editar Produto</EditarProdutoTitle>
 
-        <input
+        <InputEstilizado
           type="text"
           placeholder="Preço:"
           value={preco}
           onChange={e => setPreco(e.target.value)}
         />
 
-        <input
+        <InputEstilizado
           type="text"
           placeholder="Nome:"
           value={nome}
           onChange={e => setNome(e.target.value)}
         />
 
-        <input
+        <InputEstilizado
           type="text"
           placeholder="Descrição:"
           value={descricao}
           onChange={e => setDescricao(e.target.value)}
         />
 
-        <select
+        <SelectEstilizado
           value={tipoMedida}
           onChange={e => setTipoMedida(e.target.value)}
         >
           <option value="unidade">Unidade</option>
           <option value="kg">Quilo (kg)</option>
-        </select>
+        </SelectEstilizado>
 
         {tipoMedida === 'unidade' && (
           <>
-            <label htmlFor="quantidadeUnidade"></label>
-            <input
+            <LabelEstilizado htmlFor="quantidadeUnidade"></LabelEstilizado>
+            <InputEstilizado
               id="quantidadeUnidade"
               type="number"
               min="0"
@@ -136,8 +239,8 @@ function Edicao() {
 
         {tipoMedida === 'kg' && (
           <>
-            <label htmlFor="pesoKg"></label>
-            <input
+            <LabelEstilizado htmlFor="pesoKg"></LabelEstilizado>
+            <InputEstilizado
               id="pesoKg"
               type="number"
               step="0.01"
@@ -149,15 +252,15 @@ function Edicao() {
           </>
         )}
 
-        {erro && <p className="erro-aviso">{erro}</p>}
+        {erro && <ErroAviso>{erro}</ErroAviso>}
         
-        <h1 className="salvar" onClick={handleSalvar}>
+        <SalvarButton onClick={handleSalvar}>
           Salvar
-        </h1>
-      </div>
+        </SalvarButton>
+      </GridEsquerda>
 
-      <div className="grid-direita" />
-    </div>
+      <GridDireita />
+    </PrincipalContainer>
   );
 }
 

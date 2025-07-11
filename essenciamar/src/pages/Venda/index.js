@@ -2,8 +2,177 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Modal } from 'bootstrap';
-import './venda.css';
+import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+
+const GlobalStyle = styled.div`
+  @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+    font-family: 'Material Symbols Outlined';
+    font-size: 24px;
+    color: white;
+    vertical-align: middle;
+  }
+
+  body {
+    background-color: #9ab991;
+    font-family: 'American Typewriter', serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+`;
+
+const TabelaContainer = styled.div`
+  background-color: #9ab991;
+  font-family: 'American Typewriter', serif;
+  min-height: 100vh;
+`;
+
+const Header = styled.header`
+  background-color: #2a5554;
+  padding: 15px;
+  width: 100%;
+  margin-bottom: auto;
+`;
+
+const TituloPrincipal = styled.h1`
+  font-size: 60px;
+  color: white;
+  margin: 0;
+`;
+
+const TabelaCustom = styled.table`
+  width: 100%;
+  margin-bottom: 30px;
+  background-color: #9ab991;
+  border-collapse: collapse;
+
+  th {
+    background-color: #2a5554;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    border: 2px solid white;
+  }
+
+  td {
+    padding: 12px;
+    text-align: center;
+    color: white;
+    border: 2px solid white;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #9ab991;
+  }
+
+  tbody tr:nth-child(odd) {
+    background-color: #2a5554;
+  }
+`;
+
+const BotaoAcao = styled.button`
+  border: none;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 4px;
+`;
+
+const PagamentoContainer = styled.div`
+  width: 400px;
+  margin-left: 68%;
+  margin-bottom: 30px;
+  font-family: 'American Typewriter', serif;
+  color: #2a5554;
+  font-size: 20px;
+`;
+
+const BotaoVender = styled.button`
+  background-color: #2a5554;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  font-family: 'American Typewriter', serif;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+`;
+
+const InputPagamento = styled.input`
+  background-color: #f0f7f2;
+  border-radius: 10px;
+  border: 1px solid #2a5554;
+  color: #2a5554;
+  font-size: 16px;
+  font-family: 'American Typewriter', serif;
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 8px 12px;
+`;
+
+const SelectPagamento = styled.select`
+  margin-bottom: 10px;
+  background-color: #f0f7f2;
+  border: 1px solid #2a5554;
+  color: #2a5554;
+  font-family: 'American Typewriter', serif;
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 10px;
+`;
+
+const BotoesContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-left: 68%;
+  margin-bottom: 30px;
+`;
+
+const ResumoTotalInput = styled.input`
+  width: 160px;
+  background-color: #f0f7f2;
+  border: 1px solid #2a5554;
+  color: #2a5554;
+  font-size: 18px;
+  font-family: 'American Typewriter', serif;
+  padding: 6px 12px;
+  margin-right: 3%;
+  border-radius: 8px;
+  text-align: center;
+`;
+
+const ModalEstilizado = styled.div`
+  .modal-content {
+    background-color: #9ab991;
+    border: 3px solid white;
+  }
+  
+  .modal-header {
+    background-color: white;
+    border-bottom: 2px solid #2a5554;
+  }
+  
+  .modal-title {
+    color: #2a5554;
+    font-family: 'American Typewriter', serif;
+  }
+  
+  .descricao-container {
+    color: #2a5554;
+    font-family: 'American Typewriter', serif;
+  }
+`;
 
 const Venda = () => {
   const [carrinho, setCarrinho] = useState([]);
@@ -12,7 +181,6 @@ const Venda = () => {
   const [troco, setTroco] = useState(null);
   const [total, setTotal] = useState(0);
   const navigate = useNavigate();
-
 
   useEffect(() => {
     const carrinhoSalvo = JSON.parse(localStorage.getItem('carrinho')) || [];
@@ -27,6 +195,30 @@ const Venda = () => {
     });
     setTotal(soma.toFixed(2));
   }, [carrinho]);
+
+  const atualizarEstoque = (produtosVendidos) => {
+    const produtosAtuais = JSON.parse(localStorage.getItem('produtos')) || [];
+    
+    produtosVendidos.forEach(produtoVendido => {
+      const produtoIndex = produtosAtuais.findIndex(p => p.id === produtoVendido.id);
+      
+      if (produtoIndex !== -1) {
+        const produto = produtosAtuais[produtoIndex];
+        
+        if (produto.estoque.includes('Kg')) {
+          const estoqueAtual = parseFloat(produto.estoque.replace('Kg', '').trim());
+          const novoEstoque = (estoqueAtual - produtoVendido.quantidade).toFixed(2);
+          produtosAtuais[produtoIndex].estoque = `${novoEstoque} Kg`;
+        } else {
+          const estoqueAtual = parseInt(produto.estoque.replace('unidades', '').trim());
+          const novoEstoque = estoqueAtual - produtoVendido.quantidade;
+          produtosAtuais[produtoIndex].estoque = `${novoEstoque} unidades`;
+        }
+      }
+    });
+    
+    localStorage.setItem('produtos', JSON.stringify(produtosAtuais));
+  };
 
   const removeItem = (id) => {
     const novoCarrinho = carrinho.filter(item => item.id !== id);
@@ -76,15 +268,15 @@ const Venda = () => {
         alert("Valor pago insuficiente. Por favor, informe um valor igual ou maior que o total.");
         return;
       }
-      
-
     }
   
+    atualizarEstoque(carrinho);
+
     const vendas = JSON.parse(localStorage.getItem('vendas')) || [];
-  
+
     const novaVenda = {
       id: Date.now(),
-      data: new Date().toISOString().split('T')[0], // data no formato YYYY-MM-DD
+      data: new Date().toISOString().split('T')[0],
       produtos: carrinho.map(item => ({
         nome: item.produto,
         quantidade: item.quantidade,
@@ -93,10 +285,10 @@ const Venda = () => {
         descricao: item.descricao || ''
       }))
     };
-  
+
     vendas.push(novaVenda);
     localStorage.setItem('vendas', JSON.stringify(vendas));
-  
+
     alert('Venda finalizada!');
     navigate('/tabela');
     setCarrinho([]);
@@ -106,109 +298,109 @@ const Venda = () => {
     setTroco(null);
     setTotal(0);
   };
-  
 
   return (
-    <div className="tabela-container">
-      <header className="header">
-        <h1 className="titulo-principal">ESSÊNCIA DO MAR - PONTAL DO PARANÁ</h1>
-      </header>
+    <GlobalStyle>
+      <TabelaContainer>
+        <Header>
+          <TituloPrincipal>ESSÊNCIA DO MAR - PONTAL DO PARANÁ</TituloPrincipal>
+        </Header>
 
-      <table className="tabela-custom">
-        <thead>
-          <tr>
-            <th>PRODUTO</th>
-            <th>QUANTIDADE</th>
-            <th>PREÇO UNITÁRIO</th>
-            <th>PREÇO TOTAL</th>
-            <th>AÇÕES</th>
-          </tr>
-        </thead>
-        <tbody>
-          {carrinho.length === 0 && (
+        <TabelaCustom>
+          <thead>
             <tr>
-              <td colSpan="5" style={{ textAlign: 'center' }}>Carrinho vazio</td>
+              <th>PRODUTO</th>
+              <th>QUANTIDADE</th>
+              <th>PREÇO UNITÁRIO</th>
+              <th>PREÇO TOTAL</th>
+              <th>AÇÕES</th>
             </tr>
-          )}
-          {carrinho.map((item) => {
-            const precoUnit = parseFloat(item.preco.replace('R$', '').replace(',', '.'));
-            const precoTotal = (precoUnit * item.quantidade).toFixed(2);
-            return (
-              <tr key={item.id}>
-                <td>{item.produto}</td>
-                <td>{item.quantidade} {item.tipo}</td>
-                <td>R$ {precoUnit.toFixed(2).replace('.', ',')}</td>
-                <td>R$ {precoTotal.replace('.', ',')}</td>
-                <td>
-                  <button className="btn-remove" onClick={() => removeItem(item.id)} title="Remover">
-                    <span className="material-symbols-outlined">delete</span>
-                  </button>
-                  <button className="btn-info" onClick={() => mostrarMaisInfo(item)} title="Info">
-                    <span className="material-symbols-outlined">info</span>
-                  </button>
-                </td>
+          </thead>
+          <tbody>
+            {carrinho.length === 0 && (
+              <tr>
+                <td colSpan="5" style={{ textAlign: 'center' }}>Carrinho vazio</td>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
-
-      <div className="botoes-container">
-        <button className="btn-vender" onClick={finalizarVenda}>Finalizar Venda</button>
-        <input
-          type="text"
-          className="form-control resumo-total-input"
-          value={`R$ ${total.toString().replace('.', ',')}`}
-          readOnly
-        />
-      </div>
-
-      <div className="pagamento-container">
-        <label>Forma de Pagamento:</label>
-        <select
-          className="form-select"
-          value={formaPagamento}
-          onChange={(e) => {
-            setFormaPagamento(e.target.value);
-            setTroco(null);
-            setValorPago('');
-          }}
-        >
-          <option value="">Selecione</option>
-          <option value="cartao">Cartão</option>
-          <option value="dinheiro">Dinheiro</option>
-        </select>
-
-        {formaPagamento === 'dinheiro' && (
-          <>
-            <label>Valor entregue:</label>
-            <input
-              type="number"
-              className="form-control"
-              value={valorPago}
-              onChange={(e) => setValorPago(e.target.value)}
-              placeholder="R$"
-            />
-            <button className="btn-vender" onClick={calcularTroco}>Calcular Troco</button>
-            {troco !== null && (
-              <p><strong>Troco:</strong> R$ {typeof troco === 'string' ? troco : troco.toString().replace('.', ',')}</p>
             )}
-          </>
-        )}
-      </div>
+            {carrinho.map((item) => {
+              const precoUnit = parseFloat(item.preco.replace('R$', '').replace(',', '.'));
+              const precoTotal = (precoUnit * item.quantidade).toFixed(2);
+              return (
+                <tr key={item.id}>
+                  <td>{item.produto}</td>
+                  <td>{item.quantidade} {item.tipo}</td>
+                  <td>R$ {precoUnit.toFixed(2).replace('.', ',')}</td>
+                  <td>R$ {precoTotal.replace('.', ',')}</td>
+                  <td>
+                    <BotaoAcao onClick={() => removeItem(item.id)} title="Remover">
+                      <span className="material-symbols-outlined">delete</span>
+                    </BotaoAcao>
+                    <BotaoAcao onClick={() => mostrarMaisInfo(item)} title="Info">
+                      <span className="material-symbols-outlined">info</span>
+                    </BotaoAcao>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </TabelaCustom>
 
-      <div className="modal fade" id="exampleModal" tabIndex="-1">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Informações do Produto</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        <BotoesContainer>
+          <BotaoVender onClick={finalizarVenda}>Finalizar Venda</BotaoVender>
+          <ResumoTotalInput
+            type="text"
+            value={`R$ ${total.toString().replace('.', ',')}`}
+            readOnly
+          />
+        </BotoesContainer>
+
+        <PagamentoContainer>
+          <label>Forma de Pagamento:</label>
+          <SelectPagamento
+            value={formaPagamento}
+            onChange={(e) => {
+              setFormaPagamento(e.target.value);
+              setTroco(null);
+              setValorPago('');
+            }}
+          >
+            <option value="">Selecione</option>
+            <option value="cartao">Cartão</option>
+            <option value="dinheiro">Dinheiro</option>
+          </SelectPagamento>
+
+          {formaPagamento === 'dinheiro' && (
+            <>
+              <label>Valor entregue:</label>
+              <InputPagamento
+                type="number"
+                value={valorPago}
+                onChange={(e) => setValorPago(e.target.value)}
+                placeholder="R$"
+              />
+              <BotaoVender onClick={calcularTroco}>Calcular Troco</BotaoVender>
+              {troco !== null && (
+                <p><strong>Troco:</strong> R$ {typeof troco === 'string' ? troco : troco.toString().replace('.', ',')}</p>
+              )}
+            </>
+          )}
+        </PagamentoContainer>
+
+        <ModalEstilizado>
+          <div className="modal fade" id="exampleModal" tabIndex="-1">
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Informações do Produto</h5>
+                  <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div className="modal-body"></div>
+              </div>
             </div>
-            <div className="modal-body"></div>
           </div>
-        </div>
-      </div>
-    </div>
+        </ModalEstilizado>
+      </TabelaContainer>
+    </GlobalStyle>
   );
 };
 

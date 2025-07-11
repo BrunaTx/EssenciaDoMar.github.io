@@ -1,6 +1,102 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './cadastro.css';
+import styled from 'styled-components';
+import logoBackground from './logo.jpg'; 
+
+const PrincipalContainer = styled.div`
+  font-family: 'American Typewriter', serif;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+`;
+
+const GridEsquerda = styled.div`
+  background-color: #9ab991;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  padding-top: 180px !important;
+`;
+
+const GridDireita = styled.div`
+  background-image: url(${logoBackground});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+`;
+
+const NovoProduto = styled.h1`
+  position: absolute;
+  top: 20px;
+  left: 115px;
+  font-size: 80px;
+  color: #2a5554;
+  font-weight: bold;
+  font-family: 'American Typewriter', serif;
+`;
+
+const Cadastrar = styled.h1`
+  position: absolute;
+  bottom: 40px;
+  left: 12%;
+  font-size: 80px;
+  color: #2a5554;
+  font-weight: bold;
+  font-family: 'American Typewriter', serif;
+  cursor: pointer;
+`;
+
+const Input = styled.input`
+  width: 320px;
+  padding: 10px 15px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: none;
+  background-color: #d6e4da;
+  color: #2a5554;
+  box-sizing: border-box;
+  outline: none;
+  cursor: pointer;
+  margin: 2px 0 7px 0;
+  font-family: 'American Typewriter', serif;
+
+  &::placeholder {
+    color: #2a5554;
+    font-weight: normal;
+  }
+`;
+
+const Select = styled.select`
+  width: 320px;
+  padding: 10px 15px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: none;
+  background-color: #d6e4da;
+  color: #2a5554;
+  box-sizing: border-box;
+  outline: none;
+  cursor: pointer;
+  margin: 2px 0 7px 0;
+  font-family: 'American Typewriter', serif;
+`;
+
+const Label = styled.label`
+  display: block;
+  color: #2a5554;
+  font-family: 'American Typewriter', serif;
+  font-weight: normal;
+`;
+
+const ErroAviso = styled.p`
+  color:  #2a5554;
+`;
 
 function Cadastro() {
   const navigate = useNavigate();
@@ -67,47 +163,46 @@ function Cadastro() {
     setQuantidadeUnidade('');
     setPesoKg('');
 
-
     navigate('/tabela', { state: { novoProduto } });
   };
 
   return (
-    <div className="principal-container">
-      <div className="grid-esquerda">
-        <h1 className="novo-produto">Novo Produto</h1>
-        <input
+    <PrincipalContainer>
+      <GridEsquerda>
+        <NovoProduto>Novo Produto</NovoProduto>
+        <Input
           type="text"
           placeholder="Preço:"
           value={preco}
           onChange={e => setPreco(e.target.value)}
         />
 
-        <input
+        <Input
           type="text"
           placeholder="Nome:"
           value={nome}
           onChange={e => setNome(e.target.value)}
         />
 
-        <input
+        <Input
           type="text"
           placeholder="Descrição:"
           value={descricao}
           onChange={e => setDescricao(e.target.value)}
         />
 
-        <select
+        <Select
           value={tipoMedida}
           onChange={e => setTipoMedida(e.target.value)}
         >
           <option value="unidade">Unidade</option>
           <option value="kg">Quilo (kg)</option>
-        </select>
+        </Select>
 
         {tipoMedida === 'unidade' && (
           <>
-            <label htmlFor="quantidadeUnidade"></label>
-            <input
+            <Label htmlFor="quantidadeUnidade"></Label>
+            <Input
               id="quantidadeUnidade"
               type="number"
               min="0"
@@ -120,8 +215,8 @@ function Cadastro() {
 
         {tipoMedida === 'kg' && (
           <>
-            <label htmlFor="pesoKg"></label>
-            <input
+            <Label htmlFor="pesoKg"></Label>
+            <Input
               id="pesoKg"
               type="number"
               step="0.01"
@@ -132,14 +227,14 @@ function Cadastro() {
             />
           </>
         )}
-        {erro && <p className="erro-aviso">{erro}</p>}       
-         <h1 className="cadastrar" onClick={handleCadastrar} style={{ cursor: 'pointer' }}>
+        {erro && <ErroAviso>{erro}</ErroAviso>}
+        <Cadastrar onClick={handleCadastrar}>
           Cadastrar
-        </h1>
-      </div>
+        </Cadastrar>
+      </GridEsquerda>
 
-      <div className="grid-direita" />
-    </div>
+      <GridDireita />
+    </PrincipalContainer>
   );
 }
 

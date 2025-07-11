@@ -1,8 +1,206 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './controle.css';
+import styled from 'styled-components';
+import logoBackground from './logo.jpg'; 
 
-function Controle() {
+
+const PrincipalContainer = styled.div`
+  font-family: 'American Typewriter', serif;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  position: relative;
+`;
+
+const GridEsquerda = styled.div`
+  position: relative;
+  background-color: #9ab991;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -150px;
+  overflow-y: auto;
+  padding: 0 20px 80px 20px;
+`;
+
+const GridDireita = styled.div`
+  background-image: url(${logoBackground});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+`;
+
+const ControleProduto = styled.h1`
+  position: relative;
+  white-space: nowrap;
+  left: 0;
+  margin: 0;
+  font-size: 75px;
+  display: inline;
+  color: #2a5554;
+  font-weight: bold;
+  font-family: 'American Typewriter', serif;
+`;
+
+const Voltar = styled.h1`
+  position: absolute;
+  bottom: 20px;
+  left: 16%;
+  font-size: 30px;
+  color: #2a5554;
+  font-weight: bold;
+  font-family: 'American Typewriter', serif;
+  cursor: pointer;
+`;
+
+const ErroAviso = styled.p`
+  color: #2a5554;
+  font-family: 'American Typewriter', serif;
+  font-weight: normal;
+  font-size: 18px;
+  margin: 10px 0;
+`;
+
+const InputEstilizado = styled.input`
+  width: 320px;
+  padding: 10px 15px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: none;
+  background-color: #d6e4da;
+  color: #2a5554;
+  box-sizing: border-box;
+  outline: none;
+  cursor: pointer;
+  margin: 5px 0;
+  font-family: 'American Typewriter', serif;
+
+  &::placeholder {
+    color: #2a5554;
+    font-weight: normal;
+  }
+`;
+
+const LabelEstilizado = styled.label`
+  display: block;
+  color: #2a5554;
+  font-family: 'American Typewriter', serif;
+  font-weight: bold;
+  margin-top: 15px;
+`;
+
+const TotalContainer = styled.div`
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 20px;
+`;
+
+const TotalInput = styled.input`
+  font-weight: bold;
+  text-align: center;
+  width: 320px;
+  padding: 10px 15px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: none;
+  background-color: #d6e4da;
+  color: #2a5554;
+  box-sizing: border-box;
+  outline: none;
+  cursor: pointer;
+  margin: 5px 0;
+  font-family: 'American Typewriter', serif;
+`;
+
+const FiltroContainer = styled.div`
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 20px;
+`;
+
+const BotoesContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-right: 100px;
+`;
+
+const BotaoFiltro = styled.button`
+  flex: 1;
+  background-color: #2a5554;
+  color: #d6e4da;
+  font-weight: bold;
+  width: 320px;
+  padding: 10px 15px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: none;
+  box-sizing: border-box;
+  outline: none;
+  cursor: pointer;
+  margin: 5px 0;
+  font-family: 'American Typewriter', serif;
+`;
+
+const ListaVendas = styled.div`
+  width: 100%;
+  max-width: 800px;
+  margin-top: 20px;
+`;
+
+const TituloLista = styled.h2`
+  color: #2a5554;
+  text-align: center;
+  font-size: 24px;
+`;
+
+const ListaVendasUl = styled.ul`
+  list-style: none;
+  padding: 0;
+`;
+
+const VendaItem = styled.li`
+  background-color: #d6e4da;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  color: #2a5554;
+`;
+
+const VendaCabecalho = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
+
+const ProdutosLista = styled.ul`
+  margin-left: 20px;
+`;
+
+const ProdutoItem = styled.li`
+  margin-bottom: 5px;
+`;
+
+const ProdutoNome = styled.div`
+  font-weight: bold;
+  color: #2a5554;
+`;
+
+const ProdutoDetalhes = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+`;
+
+
+const Controle = () => {
   const navigate = useNavigate();
   const [dataInicial, setDataInicial] = useState('');
   const [dataFinal, setDataFinal] = useState('');
@@ -11,7 +209,6 @@ function Controle() {
   const [vendasFiltradas, setVendasFiltradas] = useState([]);
   const [todasVendas, setTodasVendas] = useState([]);
 
-  // Carrega vendas do localStorage ao montar o componente
   useEffect(() => {
     const vendasSalvas = JSON.parse(localStorage.getItem('vendas')) || [];
     setTodasVendas(vendasSalvas);
@@ -19,7 +216,6 @@ function Controle() {
     calcularTotal(vendasSalvas);
   }, []);
 
-  // Função para calcular total geral
   const calcularTotal = (vendas) => {
     const total = vendas.reduce((acc, venda) => {
       const totalVenda = venda.produtos.reduce((totalProd, produto) => {
@@ -30,7 +226,6 @@ function Controle() {
     setTotalVendas(total);
   };
 
-  // Função para filtrar vendas por intervalo de datas
   const filtrarVendas = () => {
     if (!dataInicial || !dataFinal) {
       setErro('Por favor, informe ambas as datas para filtrar.');
@@ -52,7 +247,6 @@ function Controle() {
     calcularTotal(vendasFilt);
   };
 
-  // Limpar filtro e mostrar todas as vendas
   const limparFiltro = () => {
     setDataInicial('');
     setDataFinal('');
@@ -61,7 +255,6 @@ function Controle() {
     setErro('');
   };
 
-  // Formatação de quantidade
   const formatarQuantidade = (produto) => {
     if (produto.tipo === 'kg') {
       return `${produto.quantidade} kg`;
@@ -70,7 +263,6 @@ function Controle() {
     }
   };
 
-  // Formatação de valor unitário
   const formatarValorUnitario = (produto) => {
     if (produto.tipo === 'kg') {
       return `R$ ${produto.valorUnitario.toFixed(2)}/kg`;
@@ -80,74 +272,73 @@ function Controle() {
   };
 
   return (
-    <div className="principal-container">
-      <div className="grid-esquerda">
-        <h1 className="controle-produto">Controle de Vendas</h1>
+    <PrincipalContainer>
+      <GridEsquerda>
+        <ControleProduto>Controle de Vendas</ControleProduto>
 
-        <div className="total-container">
-          <label>Total de Vendas:</label>
-          <input
+        <TotalContainer>
+          <LabelEstilizado>Total de Vendas:</LabelEstilizado>
+          <TotalInput
             type="text"
             value={`R$ ${totalVendas.toFixed(2)}`}
             readOnly
-            className="total-input"
           />
-        </div>
+        </TotalContainer>
 
-        <div className="filtro-container">
-          <label>Filtrar por período:</label>
-          <input
+        <FiltroContainer>
+          <LabelEstilizado>Filtrar por período:</LabelEstilizado>
+          <InputEstilizado
             type="date"
             placeholder="Data inicial"
             value={dataInicial}
             onChange={e => setDataInicial(e.target.value)}
           />
-          <input
+          <InputEstilizado
             type="date"
             placeholder="Data final"
             value={dataFinal}
             onChange={e => setDataFinal(e.target.value)}
           />
-          <div className="botoes-container">
-            <button onClick={filtrarVendas}>Filtrar</button>
-            <button onClick={limparFiltro}>Limpar</button>
-          </div>
-        </div>
+          <BotoesContainer>
+            <BotaoFiltro onClick={filtrarVendas}>Filtrar</BotaoFiltro>
+            <BotaoFiltro onClick={limparFiltro}>Limpar</BotaoFiltro>
+          </BotoesContainer>
+        </FiltroContainer>
 
-        {erro && <p className="erro-aviso">{erro}</p>}
+        {erro && <ErroAviso>{erro}</ErroAviso>}
 
-        <div className="lista-vendas">
-          <h2>Histórico de Vendas</h2> 
-            <ul>
-              {vendasFiltradas.map(venda => (
-                <li key={venda.id} className="venda-item">
-                  <div className="venda-cabecalho">
-                    <span>Data: {venda.data}</span>
-                    <span>Total: R$ {venda.produtos.reduce((total, prod) => total + (prod.quantidade * prod.valorUnitario), 0).toFixed(2)}</span>
-                  </div>
-                  <ul className="produtos-lista">
-                    {venda.produtos.map((produto, index) => (
-                      <li key={index}>
-                        <div className="produto-nome">{produto.nome}</div>
-                        <div className="produto-detalhes">
-                          {formatarQuantidade(produto)} - {formatarValorUnitario(produto)} - Total: R$ {(produto.quantidade * produto.valorUnitario).toFixed(2)}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ))}
-            </ul>
-        </div>
+        <ListaVendas>
+          <TituloLista>Histórico de Vendas</TituloLista>
+          <ListaVendasUl>
+            {vendasFiltradas.map(venda => (
+              <VendaItem key={venda.id}>
+                <VendaCabecalho>
+                  <span>Data: {venda.data}</span>
+                  <span>Total: R$ {venda.produtos.reduce((total, prod) => total + (prod.quantidade * prod.valorUnitario), 0).toFixed(2)}</span>
+                </VendaCabecalho>
+                <ProdutosLista>
+                  {venda.produtos.map((produto, index) => (
+                    <ProdutoItem key={index}>
+                      <ProdutoNome>{produto.nome}</ProdutoNome>
+                      <ProdutoDetalhes>
+                        {formatarQuantidade(produto)} - {formatarValorUnitario(produto)} - Total: R$ {(produto.quantidade * produto.valorUnitario).toFixed(2)}
+                      </ProdutoDetalhes>
+                    </ProdutoItem>
+                  ))}
+                </ProdutosLista>
+              </VendaItem>
+            ))}
+          </ListaVendasUl>
+        </ListaVendas>
 
-        <h1 className="voltar" onClick={() => navigate('/tabela')}>
+        <Voltar onClick={() => navigate('/tabela')}>
           Voltar
-        </h1>
-      </div>
+        </Voltar>
+      </GridEsquerda>
 
-      <div className="grid-direita" />
-    </div>
+      <GridDireita />
+    </PrincipalContainer>
   );
-}
+};
 
 export default Controle;

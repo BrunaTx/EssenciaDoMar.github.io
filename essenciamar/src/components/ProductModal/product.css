@@ -1,0 +1,29 @@
+
+.product-modal-content {
+  background-color: #9ab991;
+}
+
+.product-modal-header {
+  border-bottom: 2px solid #1f433f;
+}
+
+.product-modal-title {
+  font-family: 'American Typewriter', serif;
+  font-weight: bold;
+  color: #2a5554;
+  font-size: 35px;
+  margin-left: 50px;
+}
+
+.product-modal-body {
+  font-family: 'American Typewriter', serif;
+  font-size: 20px;
+  color: #2a5554;
+  padding: 20px;
+}
+
+.product-descricao-container {
+  background-color: #9ab991;
+  border-radius: 8px;
+  padding: 15px;
+}
