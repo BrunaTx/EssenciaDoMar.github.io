@@ -5,13 +5,16 @@ import logo from './logo.jpg';
 import orlga from './orlga.jpg';
 
 const StyledDiv = styled.div`
+  position: relative;
+  height: 100vh; 
   font-family: American Typewriter, serif;
   background-color: #9ab991 !important;
   text-align: center;
   margin: 0;
   padding: 0;
-  overflow: auto;
+  overflow: hidden;
 `;
+
 
 const StyledImg = styled.img`
   width: 14%;

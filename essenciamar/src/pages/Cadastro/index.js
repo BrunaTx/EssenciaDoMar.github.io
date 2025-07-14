@@ -219,7 +219,7 @@ function Cadastro() {
             <Input
               id="pesoKg"
               type="number"
-              step="0.01"
+              step="0.001"
               min="0"
               placeholder="Digite o peso em Kg"
               value={pesoKg}

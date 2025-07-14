@@ -20,10 +20,11 @@ const GridEsquerda = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: -150px;
+  padding-top: 50px; /* Espaço para o título */
   overflow-y: auto;
-  padding: 0 20px 80px 20px;
+  overflow-x: hidden;
 `;
+
 
 const GridDireita = styled.div`
   background-image: url(${logoBackground});
@@ -37,26 +38,28 @@ const GridDireita = styled.div`
 `;
 
 const ControleProduto = styled.h1`
-  position: relative;
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
   white-space: nowrap;
-  left: 0;
   margin: 0;
   font-size: 75px;
-  display: inline;
   color: #2a5554;
   font-weight: bold;
   font-family: 'American Typewriter', serif;
 `;
 
 const Voltar = styled.h1`
-  position: absolute;
-  bottom: 20px;
-  left: 16%;
-  font-size: 30px;
-  color: #2a5554;
-  font-weight: bold;
-  font-family: 'American Typewriter', serif;
-  cursor: pointer;
+position: relative;
+left: 3%;
+transform: translateX(-50%);
+white-space: nowrap;
+margin: 0;
+font-size: 20px;
+color: #2a5554;
+font-weight: bold;
+font-family: 'American Typewriter', serif;
 `;
 
 const ErroAviso = styled.p`
@@ -87,18 +90,23 @@ const InputEstilizado = styled.input`
   }
 `;
 
+const TotalContainer = styled.div`
+  width: 100%;
+  max-width: 350px;
+  margin-top: 100px;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const LabelEstilizado = styled.label`
   display: block;
   color: #2a5554;
   font-family: 'American Typewriter', serif;
   font-weight: bold;
   margin-top: 15px;
-`;
-
-const TotalContainer = styled.div`
-  width: 100%;
-  max-width: 350px;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 `;
 
 const TotalInput = styled.input`
@@ -121,22 +129,26 @@ const TotalInput = styled.input`
 const FiltroContainer = styled.div`
   width: 100%;
   max-width: 350px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const BotoesContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
   gap: 10px;
-  padding-right: 100px;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px;
 `;
 
+
 const BotaoFiltro = styled.button`
-  flex: 1;
   background-color: #2a5554;
   color: #d6e4da;
   font-weight: bold;
-  width: 320px;
+  width: 150px; /* Tamanho fixo */
   padding: 10px 15px;
   font-size: 18px;
   border-radius: 10px;
@@ -148,6 +160,7 @@ const BotaoFiltro = styled.button`
   font-family: 'American Typewriter', serif;
 `;
 
+
 const ListaVendas = styled.div`
   width: 100%;
   max-width: 800px;
@@ -155,8 +168,10 @@ const ListaVendas = styled.div`
 `;
 
 const TituloLista = styled.h2`
+position: relative;
   color: #2a5554;
   text-align: center;
+  left: 2%;
   font-size: 24px;
 `;
 

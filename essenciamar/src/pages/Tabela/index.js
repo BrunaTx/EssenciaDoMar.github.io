@@ -103,61 +103,78 @@ const MensagemErro = styled.div`
 const Tabela = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
   const [erro, setErro] = useState('');
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
   const [produtoSelecionadoParaInfo, setProdutoSelecionadoParaInfo] = useState(null);
   const [quantidade, setQuantidade] = useState('');
-  const [tasks, setTasks] = useState(() => {
-    const produtosSalvos = JSON.parse(localStorage.getItem('produtos'));
-    return produtosSalvos || [
-      {
-        id: 1,
-        produto: 'Óleo Essencial',
-        preco: 'R$ 10,99',
-        estoque: '50 unidades',
-        descricao: 'Óleo Essencial de Lavanda – 10ml. Óleo 100% puro e natural, com aroma suave e floral.'
-      },
-      {
-        id: 2,
-        produto: 'Sabonete Natural',
-        preco: 'R$ 5,99',
-        estoque: '30 unidades',
-        descricao: 'Sabonete feito com ingredientes naturais, suave para a pele e biodegradável.'
-      },
-      {
-        id: 3,
-        produto: 'Creme Hidratante',
-        preco: 'R$ 15,99',
-        estoque: '25 unidades',
-        descricao: 'Creme hidratante com propriedades nutritivas para manter sua pele macia e saudável.'
-      },
-      {
-        id: 4,
-        produto: 'Castanha',
-        preco: 'R$ 15,99',
-        estoque: '3 Kg',
-        descricao: 'Castanha-do-Pará embalada a vácuo. Ideal para lanches saudáveis e receitas.'
-      }
-    ];
-  });
 
+  // ✅ useState CORRETO
+  const [tasks, setTasks] = useState(() => {
+    const dadosSalvos = localStorage.getItem('produtos');
+    if (dadosSalvos) {
+      return JSON.parse(dadosSalvos);
+    } else {
+      return [
+        {
+          id: 1,
+          produto: 'Óleo Essencial',
+          preco: 'R$ 10,99',
+          estoque: '50 unidades',
+          descricao:
+            'Óleo Essencial de Lavanda – 10ml. Óleo 100% puro e natural, com aroma suave e floral. Ideal para relaxar, aliviar o estresse e promover o bem-estar. Pode ser usado em difusores, massagens (diluído) ou banhos. Extraído das flores por destilação a vapor.',
+        },
+        {
+          id: 2,
+          produto: 'Sabonete Natural',
+          preco: 'R$ 5,99',
+          estoque: '30 unidades',
+          descricao: 'Sabonete feito com ingredientes naturais, suave para a pele e biodegradável.',
+        },
+        {
+          id: 3,
+          produto: 'Creme Hidratante',
+          preco: 'R$ 15,99',
+          estoque: '25 unidades',
+          descricao: 'Creme hidratante com propriedades nutritivas para manter sua pele macia e saudável.',
+        },
+        {
+          id: 4,
+          produto: 'Castanha',
+          preco: 'R$ 15,99',
+          estoque: '3Kg',
+          descricao: 'Castanha-do-Pará embalada a vácuo. Ideal para lanches saudáveis e receitas.',
+        },
+      ];
+    }
+  });
   useEffect(() => {
     localStorage.setItem('produtos', JSON.stringify(tasks));
   }, [tasks]);
 
   useEffect(() => {
     if (location.state) {
+      const produtosSalvos = JSON.parse(localStorage.getItem('produtos')) || [];
+      let novaLista = [...produtosSalvos];
+  
       if (location.state.novoProduto) {
-        setTasks([...tasks, location.state.novoProduto]);
+        novaLista.push(location.state.novoProduto);
       } else if (location.state.produtoEditado) {
-        setTasks(
-          tasks.map((task) =>
-            task.id === location.state.produtoEditado.id ? location.state.produtoEditado : task
-          )
+        novaLista = novaLista.map((task) =>
+          task.id === location.state.produtoEditado.id
+            ? location.state.produtoEditado
+            : task
         );
       }
+  
+      setTasks(novaLista);
+      localStorage.setItem('produtos', JSON.stringify(novaLista));
+  
+      // Limpa o estado de navegação após usar
+      navigate(location.pathname, { replace: true });
     }
   }, [location.state]);
+  
 
   const verificarEstoqueDisponivel = (produto, quantidadeDesejada) => {
     if (produto.estoque.includes('Kg')) {
