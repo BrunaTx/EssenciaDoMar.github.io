@@ -109,43 +109,13 @@ const Tabela = () => {
   const [produtoSelecionadoParaInfo, setProdutoSelecionadoParaInfo] = useState(null);
   const [quantidade, setQuantidade] = useState('');
 
-  // ✅ useState CORRETO
+
   const [tasks, setTasks] = useState(() => {
     const dadosSalvos = localStorage.getItem('produtos');
     if (dadosSalvos) {
       return JSON.parse(dadosSalvos);
     } else {
-      return [
-        {
-          id: 1,
-          produto: 'Óleo Essencial',
-          preco: 'R$ 10,99',
-          estoque: '50 unidades',
-          descricao:
-            'Óleo Essencial de Lavanda – 10ml. Óleo 100% puro e natural, com aroma suave e floral. Ideal para relaxar, aliviar o estresse e promover o bem-estar. Pode ser usado em difusores, massagens (diluído) ou banhos. Extraído das flores por destilação a vapor.',
-        },
-        {
-          id: 2,
-          produto: 'Sabonete Natural',
-          preco: 'R$ 5,99',
-          estoque: '30 unidades',
-          descricao: 'Sabonete feito com ingredientes naturais, suave para a pele e biodegradável.',
-        },
-        {
-          id: 3,
-          produto: 'Creme Hidratante',
-          preco: 'R$ 15,99',
-          estoque: '25 unidades',
-          descricao: 'Creme hidratante com propriedades nutritivas para manter sua pele macia e saudável.',
-        },
-        {
-          id: 4,
-          produto: 'Castanha',
-          preco: 'R$ 15,99',
-          estoque: '3Kg',
-          descricao: 'Castanha-do-Pará embalada a vácuo. Ideal para lanches saudáveis e receitas.',
-        },
-      ];
+      
     }
   });
   useEffect(() => {
@@ -153,27 +123,37 @@ const Tabela = () => {
   }, [tasks]);
 
   useEffect(() => {
-    if (location.state) {
-      const produtosSalvos = JSON.parse(localStorage.getItem('produtos')) || [];
-      let novaLista = [...produtosSalvos];
+    if (location.state?.novoProduto) {
+      setTasks(prevTasks => {
+        const produtoJaExiste = prevTasks.some(
+          p => p.id === location.state.novoProduto.id
+        );
+        if (produtoJaExiste) return prevTasks; 
   
-      if (location.state.novoProduto) {
-        novaLista.push(location.state.novoProduto);
-      } else if (location.state.produtoEditado) {
-        novaLista = novaLista.map((task) =>
+        const novaLista = [...prevTasks, location.state.novoProduto];
+        localStorage.setItem('produtos', JSON.stringify(novaLista));
+        return novaLista;
+      });
+  
+      navigate(location.pathname, { replace: true });
+    }
+  
+    if (location.state?.produtoEditado) {
+      setTasks(prevTasks => {
+        const novaLista = prevTasks.map(task =>
           task.id === location.state.produtoEditado.id
             ? location.state.produtoEditado
             : task
         );
-      }
+        localStorage.setItem('produtos', JSON.stringify(novaLista));
+        return novaLista;
+      });
   
-      setTasks(novaLista);
-      localStorage.setItem('produtos', JSON.stringify(novaLista));
-  
-      // Limpa o estado de navegação após usar
       navigate(location.pathname, { replace: true });
     }
-  }, [location.state]);
+  }, [location.state, navigate]);
+  
+  
   
 
   const verificarEstoqueDisponivel = (produto, quantidadeDesejada) => {
@@ -200,7 +180,7 @@ const Tabela = () => {
     if (
       !quantidade ||
       isNaN(valor) ||
-      valor <= 0 ||
+      valor <= 0 
       (produtoSelecionado.estoque.includes('Kg') && valor < 0.01) ||
       (!produtoSelecionado.estoque.includes('Kg') && !Number.isInteger(valor))
     ) {
@@ -238,9 +218,21 @@ const Tabela = () => {
 
   const [filtro, setFiltro] = useState('');
 
-  const removeTask = (id) => {
-    setTasks(tasks.filter((task) => task.id !== id));
+  const removeTask = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/produtos/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('');
+      }
+      setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
+    } catch (error) {
+      console.error(error);
+  
+    }
   };
+  
 
   const removerAcentos = (texto) =>
     texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();

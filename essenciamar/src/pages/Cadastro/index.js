@@ -109,62 +109,68 @@ function Cadastro() {
   const [pesoKg, setPesoKg] = useState('');
   const [erro, setErro] = useState('');
 
-  const handleCadastrar = () => {
+  const handleCadastrar = async () => {
     const precoFormatado = preco.trim().replace(',', '.');
     const precoNumero = parseFloat(precoFormatado);
-
+  
     if (
-      !preco.trim() &&
-      !nome.trim() &&
-      !descricao.trim() &&
-      !quantidadeUnidade.trim() &&
-      !pesoKg.trim()
+      !preco.trim() ||
+      !nome.trim() ||
+      !descricao.trim() ||
+      (tipoMedida === 'unidade' && !quantidadeUnidade.trim()) ||
+      (tipoMedida === 'kg' && !pesoKg.trim())
     ) {
-      setErro('Por favor, preencha todos os campos.');
+      setErro('Por favor, preencha todos os campos corretamente.');
       return;
     }
-
-    if (!preco || isNaN(precoNumero)) {
+  
+    if (isNaN(precoNumero)) {
       setErro('Por favor, informe um preço válido (somente números).');
       return;
     }
-
-    if (!nome.trim()) {
-      setErro('Por favor, informe o nome do produto.');
-      return;
-    }
-
-    if (!descricao.trim()) {
-      setErro('Por favor, informe a descrição do produto.');
-      return;
-    }
-
-    if (tipoMedida === 'kg' && !pesoKg.trim()) {
-      setErro('Por favor, informe o quilo (Kg) do produto.');
-      return;
-    }
-
-    if (tipoMedida === 'unidade' && !quantidadeUnidade.trim()) {
-      setErro('Por favor, informe a unidade do produto.');
-      return;
-    }
-
+  
     const novoProduto = {
-      id: Date.now(),
-      preco: `R$ ${precoNumero.toFixed(2).replace('.', ',')}`,
+      preco: precoFormatado,
       produto: nome,
       descricao,
-      estoque: tipoMedida === 'unidade' ? `${quantidadeUnidade} unidades` : `${pesoKg} Kg`,
+      tipoMedida,
+      quantidadeUnidade,
+      pesoKg,
     };
-
-    setPreco('');
-    setNome('');
-    setDescricao('');
-    setQuantidadeUnidade('');
-    setPesoKg('');
-
-    navigate('/tabela', { state: { novoProduto } });
+  
+    try {
+      const response = await fetch('http://localhost:3000/api/produtos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(novoProduto),
+      });
+  
+      if (!response.ok) {
+        const { message } = await response.json();
+        setErro(message || 'Erro ao cadastrar produto.');
+        return;
+      }
+  
+      const produtoCriado = await response.json();
+  
+      // Limpa os campos
+      setPreco('');
+      setNome('');
+      setDescricao('');
+      setQuantidadeUnidade('');
+      setPesoKg('');
+      setErro('');
+  
+    
+      navigate('/tabela', { state: { novoProduto: produtoCriado } });
+  
+    } catch (error) {
+      console.error(error);
+      setErro('Erro ao cadastrar produto.');
+    }
   };
+  
+  
 
   return (
     <PrincipalContainer>

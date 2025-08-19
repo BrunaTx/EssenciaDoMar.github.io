@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import logoBackground from './logo.jpg'; 
-
+import logoBackground from './logo.jpg';
 
 const PrincipalContainer = styled.div`
   font-family: 'American Typewriter', serif;
@@ -23,7 +22,7 @@ const GridEsquerda = styled.div`
 `;
 
 const GridDireita = styled.div`
-   background-image: url(${logoBackground});
+  background-image: url(${logoBackground});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -40,7 +39,6 @@ const EditarProdutoTitle = styled.h1`
   font-size: 80px;
   color: #2a5554;
   font-weight: bold;
-  font-family: 'American Typewriter', serif;
 `;
 
 const SalvarButton = styled.h1`
@@ -50,13 +48,11 @@ const SalvarButton = styled.h1`
   font-size: 80px;
   color: #2a5554;
   font-weight: bold;
-  font-family: 'American Typewriter', serif;
   cursor: pointer;
 `;
 
 const ErroAviso = styled.p`
   color: #2a5554;
-  font-family: 'American Typewriter', serif;
   font-weight: normal;
   font-size: 18px;
   margin-top: 2px;
@@ -71,16 +67,9 @@ const InputEstilizado = styled.input`
   border: none;
   background-color: #d6e4da;
   color: #2a5554;
-  box-sizing: border-box;
   outline: none;
   cursor: pointer;
   margin: 2px 0 7px 0;
-  font-family: 'American Typewriter', serif;
-
-  &::placeholder {
-    color: #2a5554;
-    font-weight: normal;
-  }
 `;
 
 const SelectEstilizado = styled.select`
@@ -91,23 +80,13 @@ const SelectEstilizado = styled.select`
   border: none;
   background-color: #d6e4da;
   color: #2a5554;
-  box-sizing: border-box;
-  outline: none;
-  cursor: pointer;
   margin: 2px 0 7px 0;
-  font-family: 'American Typewriter', serif;
-`;
-
-const LabelEstilizado = styled.label`
-  display: block;
-  color: #2a5554;
-  font-family: 'American Typewriter', serif;
-  font-weight: normal;
 `;
 
 function Edicao() {
   const navigate = useNavigate();
   const location = useLocation();
+
   const [id, setId] = useState(null);
   const [preco, setPreco] = useState('');
   const [nome, setNome] = useState('');
@@ -118,16 +97,15 @@ function Edicao() {
   const [erro, setErro] = useState('');
 
   useEffect(() => {
-    if (location.state && location.state.produtoParaEditar) {
+    if (location.state?.produtoParaEditar) {
       const produto = location.state.produtoParaEditar;
       setId(produto.id);
-      
+
       const precoNumerico = produto.preco.replace('R$ ', '').replace(',', '.');
       setPreco(precoNumerico);
-      
       setNome(produto.produto);
       setDescricao(produto.descricao);
-      
+
       if (produto.estoque.includes('unidades')) {
         setTipoMedida('unidade');
         setQuantidadeUnidade(produto.estoque.replace(' unidades', ''));
@@ -143,49 +121,31 @@ function Edicao() {
     const precoNumero = parseFloat(precoFormatado);
 
     if (
-      !preco.trim() &&
-      !nome.trim() &&
-      !descricao.trim() &&
-      !quantidadeUnidade.trim() &&
-      !pesoKg.trim()
+      !preco.trim() ||
+      !nome.trim() ||
+      !descricao.trim() ||
+      (tipoMedida === 'unidade' && !quantidadeUnidade.trim()) ||
+      (tipoMedida === 'kg' && !pesoKg.trim())
     ) {
       setErro('Por favor, preencha todos os campos.');
       return;
     }
 
-    if (!preco || isNaN(precoNumero)) {
-      setErro('Por favor, informe um preço válido (somente números).');
-      return;
-    }
-
-    if (!nome.trim()) {
-      setErro('Por favor, informe o nome do produto.');
-      return;
-    }
-
-    if (!descricao.trim()) {
-      setErro('Por favor, informe a descrição do produto.');
-      return;
-    }
-
-    if (tipoMedida === 'kg' && !pesoKg.trim()) {
-      setErro('Por favor, informe o quilo (Kg) do produto.');
-      return;
-    }
-
-    if (tipoMedida === 'unidade' && !quantidadeUnidade.trim()) {
-      setErro('Por favor, informe a unidade do produto.');
+    if (isNaN(precoNumero)) {
+      setErro('Por favor, informe um preço válido.');
       return;
     }
 
     const produtoEditado = {
-      id: id || Date.now(),
-      preco: `R$ ${precoNumero.toFixed(2).replace('.', ',')}`,
+      id,
       produto: nome,
+      preco: `R$ ${precoNumero.toFixed(2).replace('.', ',')}`,
       descricao,
-      estoque: tipoMedida === 'unidade' ? `${quantidadeUnidade} unidades` : `${pesoKg} Kg`,
+      estoque:
+        tipoMedida === 'unidade' ? `${quantidadeUnidade} unidades` : `${pesoKg} Kg`,
     };
 
+    
     navigate('/tabela', { state: { produtoEditado } });
   };
 
@@ -198,65 +158,55 @@ function Edicao() {
           type="text"
           placeholder="Preço:"
           value={preco}
-          onChange={e => setPreco(e.target.value)}
+          onChange={(e) => setPreco(e.target.value)}
         />
 
         <InputEstilizado
           type="text"
           placeholder="Nome:"
           value={nome}
-          onChange={e => setNome(e.target.value)}
+          onChange={(e) => setNome(e.target.value)}
         />
 
         <InputEstilizado
           type="text"
           placeholder="Descrição:"
           value={descricao}
-          onChange={e => setDescricao(e.target.value)}
+          onChange={(e) => setDescricao(e.target.value)}
         />
 
         <SelectEstilizado
           value={tipoMedida}
-          onChange={e => setTipoMedida(e.target.value)}
+          onChange={(e) => setTipoMedida(e.target.value)}
         >
           <option value="unidade">Unidade</option>
           <option value="kg">Quilo (kg)</option>
         </SelectEstilizado>
 
         {tipoMedida === 'unidade' && (
-          <>
-            <LabelEstilizado htmlFor="quantidadeUnidade"></LabelEstilizado>
-            <InputEstilizado
-              id="quantidadeUnidade"
-              type="number"
-              min="0"
-              placeholder="Digite a quantidade"
-              value={quantidadeUnidade}
-              onChange={e => setQuantidadeUnidade(e.target.value)}
-            />
-          </>
+          <InputEstilizado
+            type="number"
+            min="0"
+            placeholder="Digite a quantidade"
+            value={quantidadeUnidade}
+            onChange={(e) => setQuantidadeUnidade(e.target.value)}
+          />
         )}
 
         {tipoMedida === 'kg' && (
-          <>
-            <LabelEstilizado htmlFor="pesoKg"></LabelEstilizado>
-            <InputEstilizado
-              id="pesoKg"
-              type="number"
-              step="0.01"
-              min="0"
-              placeholder="Digite o peso em Kg"
-              value={pesoKg}
-              onChange={e => setPesoKg(e.target.value)}
-            />
-          </>
+          <InputEstilizado
+            type="number"
+            step="0.01"
+            min="0"
+            placeholder="Digite o peso em Kg"
+            value={pesoKg}
+            onChange={(e) => setPesoKg(e.target.value)}
+          />
         )}
 
         {erro && <ErroAviso>{erro}</ErroAviso>}
-        
-        <SalvarButton onClick={handleSalvar}>
-          Salvar
-        </SalvarButton>
+
+        <SalvarButton onClick={handleSalvar}>Salvar</SalvarButton>
       </GridEsquerda>
 
       <GridDireita />
