@@ -116,38 +116,42 @@ function Edicao() {
     }
   }, [location.state]);
 
-  const handleSalvar = () => {
-    const precoFormatado = preco.trim().replace(',', '.');
-    const precoNumero = parseFloat(precoFormatado);
-
-    if (
-      !preco.trim() ||
-      !nome.trim() ||
-      !descricao.trim() ||
-      (tipoMedida === 'unidade' && !quantidadeUnidade.trim()) ||
-      (tipoMedida === 'kg' && !pesoKg.trim())
-    ) {
-      setErro('Por favor, preencha todos os campos.');
-      return;
-    }
-
+  const handleSalvar = async () => {
+    const precoNumero = parseFloat(preco.replace(',', '.'));
+  
     if (isNaN(precoNumero)) {
       setErro('Por favor, informe um preço válido.');
       return;
     }
-
+  
     const produtoEditado = {
       id,
       produto: nome,
       preco: `R$ ${precoNumero.toFixed(2).replace('.', ',')}`,
       descricao,
-      estoque:
-        tipoMedida === 'unidade' ? `${quantidadeUnidade} unidades` : `${pesoKg} Kg`,
+      estoque: tipoMedida === 'unidade' ? `${quantidadeUnidade} unidades` : `${pesoKg} Kg`,
     };
-
-    
-    navigate('/tabela', { state: { produtoEditado } });
+  
+    try {
+      const response = await fetch(`http://localhost:3000/api/produtos/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(produtoEditado),
+      });
+  
+      if (!response.ok) throw new Error('Erro ao atualizar produto');
+  
+      const atualizado = await response.json();
+      navigate('/tabela', { state: { produtoEditado: atualizado } });
+    } catch (err) {
+      console.error(err);
+      setErro('Não foi possível atualizar o produto no servidor.');
+    }
   };
+  
+  
 
   return (
     <PrincipalContainer>

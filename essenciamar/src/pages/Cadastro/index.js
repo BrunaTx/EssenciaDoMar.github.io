@@ -153,7 +153,7 @@ function Cadastro() {
   
       const produtoCriado = await response.json();
   
-      // Limpa os campos
+      
       setPreco('');
       setNome('');
       setDescricao('');

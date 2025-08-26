@@ -109,18 +109,21 @@ const Tabela = () => {
   const [produtoSelecionadoParaInfo, setProdutoSelecionadoParaInfo] = useState(null);
   const [quantidade, setQuantidade] = useState('');
 
+  const [tasks, setTasks] = useState([]);
 
-  const [tasks, setTasks] = useState(() => {
-    const dadosSalvos = localStorage.getItem('produtos');
-    if (dadosSalvos) {
-      return JSON.parse(dadosSalvos);
-    } else {
-      
-    }
-  });
   useEffect(() => {
-    localStorage.setItem('produtos', JSON.stringify(tasks));
-  }, [tasks]);
+    const fetchProdutos = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/produtos');
+        const data = await response.json();
+        setTasks(data);
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+      }
+    };
+  
+    fetchProdutos();
+  }, []);
 
   useEffect(() => {
     if (location.state?.novoProduto) {
@@ -129,33 +132,24 @@ const Tabela = () => {
           p => p.id === location.state.novoProduto.id
         );
         if (produtoJaExiste) return prevTasks; 
-  
-        const novaLista = [...prevTasks, location.state.novoProduto];
-        localStorage.setItem('produtos', JSON.stringify(novaLista));
-        return novaLista;
+        return [...prevTasks, location.state.novoProduto];
       });
-  
       navigate(location.pathname, { replace: true });
     }
   
     if (location.state?.produtoEditado) {
       setTasks(prevTasks => {
-        const novaLista = prevTasks.map(task =>
+        return prevTasks.map(task =>
           task.id === location.state.produtoEditado.id
             ? location.state.produtoEditado
             : task
         );
-        localStorage.setItem('produtos', JSON.stringify(novaLista));
-        return novaLista;
       });
-  
       navigate(location.pathname, { replace: true });
     }
   }, [location.state, navigate]);
-  
-  
-  
 
+  
   const verificarEstoqueDisponivel = (produto, quantidadeDesejada) => {
     if (produto.estoque.includes('Kg')) {
       const estoqueAtual = parseFloat(produto.estoque.replace('Kg', '').trim());
@@ -174,20 +168,22 @@ const Tabela = () => {
     modal.show();
   };
 
+  const [carrinho, setCarrinho] = useState([]);
+
   const handleAdicionarAoCarrinho = () => {
     const valor = Number(quantidade);
   
     if (
       !quantidade ||
       isNaN(valor) ||
-      valor <= 0 
+      valor <= 0 ||
       (produtoSelecionado.estoque.includes('Kg') && valor < 0.01) ||
       (!produtoSelecionado.estoque.includes('Kg') && !Number.isInteger(valor))
     ) {
       setErro('Por favor, preencha os dados da venda corretamente.');
       return;
     }
-
+  
     if (!verificarEstoqueDisponivel(produtoSelecionado, valor)) {
       setErro('Quantidade solicitada maior que o estoque disponível.');
       return;
@@ -199,9 +195,11 @@ const Tabela = () => {
       tipo: produtoSelecionado.estoque.includes('Kg') ? 'kg' : 'unidade'
     };
   
-    const carrinhoAtual = JSON.parse(localStorage.getItem('carrinho')) || [];
-    carrinhoAtual.push(itemCarrinho);
-    localStorage.setItem('carrinho', JSON.stringify(carrinhoAtual));
+    setCarrinho(prev => {
+      const novoCarrinho = [...prev, itemCarrinho];
+      localStorage.setItem('carrinho', JSON.stringify(novoCarrinho)); // <-- SALVA NO LOCALSTORAGE
+      return novoCarrinho;
+    });
   
     const modalElement = document.getElementById('modalCarrinho');
     let modalInstance = Modal.getInstance(modalElement);
@@ -215,6 +213,8 @@ const Tabela = () => {
     setErro('');
     alert('Produto adicionado ao carrinho com sucesso!');
   };
+  
+
 
   const [filtro, setFiltro] = useState('');
 
