@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logoBackground from './logo.jpg'; 
 
-
 const PrincipalContainer = styled.div`
   font-family: 'American Typewriter', serif;
   display: grid;
@@ -20,11 +19,10 @@ const GridEsquerda = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 50px; /* Espaço para o título */
+  padding-top: 50px; 
   overflow-y: auto;
   overflow-x: hidden;
 `;
-
 
 const GridDireita = styled.div`
   background-image: url(${logoBackground});
@@ -51,15 +49,16 @@ const ControleProduto = styled.h1`
 `;
 
 const Voltar = styled.h1`
-position: relative;
-left: 3%;
-transform: translateX(-50%);
-white-space: nowrap;
-margin: 0;
-font-size: 20px;
-color: #2a5554;
-font-weight: bold;
-font-family: 'American Typewriter', serif;
+  position: relative;
+  left: 3%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  margin: 0;
+  font-size: 20px;
+  color: #2a5554;
+  font-weight: bold;
+  font-family: 'American Typewriter', serif;
+  cursor: pointer;
 `;
 
 const ErroAviso = styled.p`
@@ -143,12 +142,11 @@ const BotoesContainer = styled.div`
   margin-top: 10px;
 `;
 
-
 const BotaoFiltro = styled.button`
   background-color: #2a5554;
   color: #d6e4da;
   font-weight: bold;
-  width: 150px; /* Tamanho fixo */
+  width: 150px;
   padding: 10px 15px;
   font-size: 18px;
   border-radius: 10px;
@@ -160,7 +158,6 @@ const BotaoFiltro = styled.button`
   font-family: 'American Typewriter', serif;
 `;
 
-
 const ListaVendas = styled.div`
   width: 100%;
   max-width: 800px;
@@ -168,7 +165,7 @@ const ListaVendas = styled.div`
 `;
 
 const TituloLista = styled.h2`
-position: relative;
+  position: relative;
   color: #2a5554;
   text-align: center;
   left: 2%;
@@ -213,7 +210,6 @@ const ProdutoDetalhes = styled.div`
   justify-content: space-between;
   margin-top: 5px;
 `;
-
 
 const Controle = () => {
   const navigate = useNavigate();
@@ -271,19 +267,13 @@ const Controle = () => {
   };
 
   const formatarQuantidade = (produto) => {
-    if (produto.tipo === 'kg') {
-      return `${produto.quantidade} kg`;
-    } else {
-      return `${produto.quantidade} un`;
-    }
+    if (produto.tipo === 'kg') return `${produto.quantidade} kg`;
+    return `${produto.quantidade} un`;
   };
 
   const formatarValorUnitario = (produto) => {
-    if (produto.tipo === 'kg') {
-      return `R$ ${produto.valorUnitario.toFixed(2)}/kg`;
-    } else {
-      return `R$ ${produto.valorUnitario.toFixed(2)} cada`;
-    }
+    if (produto.tipo === 'kg') return `R$ ${produto.valorUnitario.toFixed(2)}/kg`;
+    return `R$ ${produto.valorUnitario.toFixed(2)} cada`;
   };
 
   return (

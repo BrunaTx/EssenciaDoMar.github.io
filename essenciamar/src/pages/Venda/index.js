@@ -3,7 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Modal } from 'bootstrap';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 
 const GlobalStyle = styled.div`
   @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
@@ -175,55 +174,26 @@ const ModalEstilizado = styled.div`
 `;
 
 const Venda = () => {
-  const [carrinho, setCarrinho] = useState([]);
+  const [carrinho, setCarrinho] = useState([
+    { id: 1, produto: 'Óleo Essencial', preco: '25,00', quantidade: 2, tipo: 'unidade', descricao: 'Óleo essencial relaxante' },
+    { id: 2, produto: 'Sabonete Artesanal', preco: '15,00', quantidade: 1, tipo: 'kg', descricao: 'Sabonete feito à mão' },
+  ]);
   const [formaPagamento, setFormaPagamento] = useState('');
   const [valorPago, setValorPago] = useState('');
   const [troco, setTroco] = useState(null);
   const [total, setTotal] = useState(0);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const carrinhoSalvo = JSON.parse(localStorage.getItem('carrinho')) || [];
-    setCarrinho(carrinhoSalvo);
-  }, []);
 
   useEffect(() => {
     let soma = 0;
     carrinho.forEach((item) => {
-      const precoUnit = parseFloat(item.preco.replace('R$', '').replace(',', '.'));
+      const precoUnit = parseFloat(item.preco.replace(',', '.'));
       soma += precoUnit * item.quantidade;
     });
     setTotal(soma.toFixed(2));
   }, [carrinho]);
 
-  const atualizarEstoque = (produtosVendidos) => {
-    const produtosAtuais = JSON.parse(localStorage.getItem('produtos')) || [];
-    
-    produtosVendidos.forEach(produtoVendido => {
-      const produtoIndex = produtosAtuais.findIndex(p => p.id === produtoVendido.id);
-      
-      if (produtoIndex !== -1) {
-        const produto = produtosAtuais[produtoIndex];
-        
-        if (produto.estoque.includes('Kg')) {
-          const estoqueAtual = parseFloat(produto.estoque.replace('Kg', '').trim());
-          const novoEstoque = (estoqueAtual - produtoVendido.quantidade).toFixed(2);
-          produtosAtuais[produtoIndex].estoque = `${novoEstoque} Kg`;
-        } else {
-          const estoqueAtual = parseInt(produto.estoque.replace('unidades', '').trim());
-          const novoEstoque = estoqueAtual - produtoVendido.quantidade;
-          produtosAtuais[produtoIndex].estoque = `${novoEstoque} unidades`;
-        }
-      }
-    });
-    
-    localStorage.setItem('produtos', JSON.stringify(produtosAtuais));
-  };
-
   const removeItem = (id) => {
-    const novoCarrinho = carrinho.filter(item => item.id !== id);
-    setCarrinho(novoCarrinho);
-    localStorage.setItem('carrinho', JSON.stringify(novoCarrinho));
+    setCarrinho(carrinho.filter(item => item.id !== id));
   };
 
   const mostrarMaisInfo = (produto) => {
@@ -231,11 +201,9 @@ const Venda = () => {
     modalElement.querySelector('.modal-body').innerHTML = `
       <div class="descricao-container">
         <p><strong>Produto:</strong> ${produto.produto}</p>
-        <p><strong>Preço Unitário:</strong> ${produto.preco}</p>
+        <p><strong>Preço Unitário:</strong> R$ ${produto.preco}</p>
         <p><strong>Quantidade:</strong> ${produto.quantidade} ${produto.tipo}</p>
-        <p><strong>Estoque:</strong> ${produto.estoque}</p>
-        <p><strong>Descrição:</strong></p>
-        <p>${produto.descricao}</p>
+        <p><strong>Descrição:</strong> ${produto.descricao}</p>
       </div>
     `;
     const modal = new Modal(modalElement);
@@ -252,47 +220,29 @@ const Venda = () => {
 
   const finalizarVenda = () => {
     if (carrinho.length === 0) {
-      alert("Carrinho vazio! Adicione produtos antes de finalizar a venda.");
+      alert("Carrinho vazio!");
       return;
     }
-  
+
     if (!formaPagamento) {
       alert("Selecione a forma de pagamento antes de finalizar a venda.");
       return;
     }
-  
+
     if (formaPagamento === 'dinheiro') {
       const pago = parseFloat(valorPago.replace(',', '.'));
       const totalNum = parseFloat(total);
       if (isNaN(pago) || pago < totalNum) {
-        alert("Valor pago insuficiente. Por favor, informe um valor igual ou maior que o total.");
+        alert("Valor pago insuficiente. Informe um valor igual ou maior que o total.");
         return;
+      } else {
+        const trocoCalculado = (pago - totalNum).toFixed(2);
+        setTroco(trocoCalculado);
       }
     }
-  
-    atualizarEstoque(carrinho);
 
-    const vendas = JSON.parse(localStorage.getItem('vendas')) || [];
-
-    const novaVenda = {
-      id: Date.now(),
-      data: new Date().toISOString().split('T')[0],
-      produtos: carrinho.map(item => ({
-        nome: item.produto,
-        quantidade: item.quantidade,
-        tipo: item.tipo,
-        valorUnitario: parseFloat(item.preco.replace('R$', '').replace(',', '.')),
-        descricao: item.descricao || ''
-      }))
-    };
-
-    vendas.push(novaVenda);
-    localStorage.setItem('vendas', JSON.stringify(vendas));
-
-    alert('Venda finalizada!');
-    navigate('/tabela');
+    alert("Venda finalizada!");
     setCarrinho([]);
-    localStorage.removeItem('carrinho');
     setFormaPagamento('');
     setValorPago('');
     setTroco(null);
@@ -323,7 +273,7 @@ const Venda = () => {
               </tr>
             )}
             {carrinho.map((item) => {
-              const precoUnit = parseFloat(item.preco.replace('R$', '').replace(',', '.'));
+              const precoUnit = parseFloat(item.preco.replace(',', '.'));
               const precoTotal = (precoUnit * item.quantidade).toFixed(2);
               return (
                 <tr key={item.id}>
@@ -347,23 +297,12 @@ const Venda = () => {
 
         <BotoesContainer>
           <BotaoVender onClick={finalizarVenda}>Finalizar Venda</BotaoVender>
-          <ResumoTotalInput
-            type="text"
-            value={`R$ ${total.toString().replace('.', ',')}`}
-            readOnly
-          />
+          <ResumoTotalInput type="text" readOnly value={`R$ ${total.toString().replace('.', ',')}`} />
         </BotoesContainer>
 
         <PagamentoContainer>
           <label>Forma de Pagamento:</label>
-          <SelectPagamento
-            value={formaPagamento}
-            onChange={(e) => {
-              setFormaPagamento(e.target.value);
-              setTroco(null);
-              setValorPago('');
-            }}
-          >
+          <SelectPagamento value={formaPagamento} onChange={(e) => { setFormaPagamento(e.target.value); setTroco(null); setValorPago(''); }}>
             <option value="">Selecione</option>
             <option value="cartao">Cartão</option>
             <option value="dinheiro">Dinheiro</option>
@@ -372,12 +311,7 @@ const Venda = () => {
           {formaPagamento === 'dinheiro' && (
             <>
               <label>Valor entregue:</label>
-              <InputPagamento
-                type="number"
-                value={valorPago}
-                onChange={(e) => setValorPago(e.target.value)}
-                placeholder="R$"
-              />
+              <InputPagamento type="number" value={valorPago} onChange={(e) => setValorPago(e.target.value)} placeholder="R$" />
               <BotaoVender onClick={calcularTroco}>Calcular Troco</BotaoVender>
               {troco !== null && (
                 <p><strong>Troco:</strong> R$ {typeof troco === 'string' ? troco : troco.toString().replace('.', ',')}</p>

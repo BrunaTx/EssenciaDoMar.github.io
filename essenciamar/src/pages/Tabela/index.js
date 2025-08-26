@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import NavigationBar from '../../components/NavigationBar';
 import ProductModal from '../../components/ProductModal';
 import CartModal from '../../components/CartModal';
 import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
+import 'bootstrap/dist/js/bootstrap.bundle';
 import { Modal } from 'bootstrap';
 
 const GlobalStyle = styled.div`
@@ -101,55 +100,28 @@ const MensagemErro = styled.div`
 `;
 
 const Tabela = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-
   const [erro, setErro] = useState('');
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
   const [produtoSelecionadoParaInfo, setProdutoSelecionadoParaInfo] = useState(null);
   const [quantidade, setQuantidade] = useState('');
 
-  const [tasks, setTasks] = useState([]);
+  const [carrinho, setCarrinho] = useState([]);
+  const [filtro, setFiltro] = useState('');
 
-  useEffect(() => {
-    const fetchProdutos = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/api/produtos');
-        const data = await response.json();
-        setTasks(data);
-      } catch (error) {
-        console.error('Erro ao buscar produtos:', error);
-      }
-    };
-  
-    fetchProdutos();
-  }, []);
+  // Dados de exemplo sem backend
+  const [tasks, setTasks] = useState([
+    { id: 1, produto: 'Óleo Essencial', preco: 'R$ 25,00', estoque: '5 unidades' },
+    { id: 2, produto: 'Sabonete Artesanal', preco: 'R$ 15,00', estoque: '2 Kg' },
+    { id: 3, produto: 'Vela Aromática', preco: 'R$ 20,00', estoque: '10 unidades' },
+  ]);
 
-  useEffect(() => {
-    if (location.state?.novoProduto) {
-      setTasks(prevTasks => {
-        const produtoJaExiste = prevTasks.some(
-          p => p.id === location.state.novoProduto.id
-        );
-        if (produtoJaExiste) return prevTasks; 
-        return [...prevTasks, location.state.novoProduto];
-      });
-      navigate(location.pathname, { replace: true });
-    }
-  
-    if (location.state?.produtoEditado) {
-      setTasks(prevTasks => {
-        return prevTasks.map(task =>
-          task.id === location.state.produtoEditado.id
-            ? location.state.produtoEditado
-            : task
-        );
-      });
-      navigate(location.pathname, { replace: true });
-    }
-  }, [location.state, navigate]);
+  const removerAcentos = (texto) =>
+    texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
-  
+  const produtosFiltrados = tasks.filter((task) =>
+    removerAcentos(task.produto).includes(removerAcentos(filtro))
+  );
+
   const verificarEstoqueDisponivel = (produto, quantidadeDesejada) => {
     if (produto.estoque.includes('Kg')) {
       const estoqueAtual = parseFloat(produto.estoque.replace('Kg', '').trim());
@@ -168,11 +140,9 @@ const Tabela = () => {
     modal.show();
   };
 
-  const [carrinho, setCarrinho] = useState([]);
-
   const handleAdicionarAoCarrinho = () => {
     const valor = Number(quantidade);
-  
+
     if (
       !quantidade ||
       isNaN(valor) ||
@@ -183,63 +153,30 @@ const Tabela = () => {
       setErro('Por favor, preencha os dados da venda corretamente.');
       return;
     }
-  
+
     if (!verificarEstoqueDisponivel(produtoSelecionado, valor)) {
       setErro('Quantidade solicitada maior que o estoque disponível.');
       return;
     }
-  
+
     const itemCarrinho = {
       ...produtoSelecionado,
       quantidade: valor,
       tipo: produtoSelecionado.estoque.includes('Kg') ? 'kg' : 'unidade'
     };
-  
-    setCarrinho(prev => {
-      const novoCarrinho = [...prev, itemCarrinho];
-      localStorage.setItem('carrinho', JSON.stringify(novoCarrinho)); // <-- SALVA NO LOCALSTORAGE
-      return novoCarrinho;
-    });
-  
+
+    setCarrinho(prev => [...prev, itemCarrinho]);
+
     const modalElement = document.getElementById('modalCarrinho');
     let modalInstance = Modal.getInstance(modalElement);
-    if (!modalInstance) {
-      modalInstance = new Modal(modalElement);
-    }
+    if (!modalInstance) modalInstance = new Modal(modalElement);
     modalInstance.hide();
-  
+
     setProdutoSelecionado(null);
     setQuantidade('');
     setErro('');
     alert('Produto adicionado ao carrinho com sucesso!');
   };
-  
-
-
-  const [filtro, setFiltro] = useState('');
-
-  const removeTask = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:3000/api/produtos/${id}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error('');
-      }
-      setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
-    } catch (error) {
-      console.error(error);
-  
-    }
-  };
-  
-
-  const removerAcentos = (texto) =>
-    texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-
-  const produtosFiltrados = tasks.filter((task) =>
-    removerAcentos(task.produto).includes(removerAcentos(filtro))
-  );
 
   const mostrarMaisInfo = (produto) => {
     setProdutoSelecionadoParaInfo(produto);
@@ -266,41 +203,31 @@ const Tabela = () => {
             </tr>
           </thead>
           <tbody>
-            {produtosFiltrados.map((task) => (
-              <tr key={task.id}>
-                <td>{task.produto}</td>
-                <td>{task.preco}</td>
-                <td>{task.estoque}</td>
-                <td>
-                  <Link
-                    to="/edicao"
-                    state={{ produtoParaEditar: task }}
-                    className="btn-edit"
-                    title="Editar"
-                  >
-                    <span className="material-symbols-outlined">edit</span>
-                  </Link>
-                  <BotaoAcao className="btn-remove" onClick={() => removeTask(task.id)} title="Remover">
-                    <span className="material-symbols-outlined">delete</span>
-                  </BotaoAcao>
-                  <BotaoAcao
-                    className="btn-info"
-                    onClick={() => mostrarMaisInfo(task)}
-                    title="Info"
-                  >
-                    <span className="material-symbols-outlined">info</span>
-                  </BotaoAcao>
-                  <BotaoAcao
-                    className="btn-info"
-                    title="Adicionar ao Carrinho"
-                    onClick={() => abrirModalCarrinho(task)}
-                  >
-                    <span className="material-symbols-outlined">add_shopping_cart</span>
-                  </BotaoAcao>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+  {produtosFiltrados.map((task) => (
+    <tr key={task.id}>
+      <td>{task.produto}</td>
+      <td>{task.preco}</td>
+      <td>{task.estoque}</td>
+      <td>
+        <BotaoAcao onClick={() => alert(`Editar: ${task.produto}`)} title="Editar">
+          <span className="material-symbols-outlined">edit</span>
+        </BotaoAcao>
+
+        <BotaoAcao onClick={() => mostrarMaisInfo(task)} title="Info">
+          <span className="material-symbols-outlined">info</span>
+        </BotaoAcao>
+
+        <BotaoAcao
+          title="Adicionar ao Carrinho"
+          onClick={() => abrirModalCarrinho(task)}
+        >
+          <span className="material-symbols-outlined">add_shopping_cart</span>
+        </BotaoAcao>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
         </TabelaEstilizada>
 
         <ProductModal produto={produtoSelecionadoParaInfo} />

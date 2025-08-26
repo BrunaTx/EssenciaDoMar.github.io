@@ -95,7 +95,7 @@ const Label = styled.label`
 `;
 
 const ErroAviso = styled.p`
-  color:  #2a5554;
+  color: #2a5554;
 `;
 
 function Cadastro() {
@@ -112,7 +112,7 @@ function Cadastro() {
   const handleCadastrar = async () => {
     const precoFormatado = preco.trim().replace(',', '.');
     const precoNumero = parseFloat(precoFormatado);
-  
+
     if (
       !preco.trim() ||
       !nome.trim() ||
@@ -123,12 +123,12 @@ function Cadastro() {
       setErro('Por favor, preencha todos os campos corretamente.');
       return;
     }
-  
+
     if (isNaN(precoNumero)) {
       setErro('Por favor, informe um preço válido (somente números).');
       return;
     }
-  
+
     const novoProduto = {
       preco: precoFormatado,
       produto: nome,
@@ -137,40 +137,36 @@ function Cadastro() {
       quantidadeUnidade,
       pesoKg,
     };
-  
+
     try {
       const response = await fetch('http://localhost:3000/api/produtos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(novoProduto),
       });
-  
+
       if (!response.ok) {
         const { message } = await response.json();
         setErro(message || 'Erro ao cadastrar produto.');
         return;
       }
-  
+
       const produtoCriado = await response.json();
-  
-      
+
       setPreco('');
       setNome('');
       setDescricao('');
       setQuantidadeUnidade('');
       setPesoKg('');
       setErro('');
-  
-    
+
       navigate('/tabela', { state: { novoProduto: produtoCriado } });
-  
+
     } catch (error) {
       console.error(error);
       setErro('Erro ao cadastrar produto.');
     }
   };
-  
-  
 
   return (
     <PrincipalContainer>
@@ -182,21 +178,18 @@ function Cadastro() {
           value={preco}
           onChange={e => setPreco(e.target.value)}
         />
-
         <Input
           type="text"
           placeholder="Nome:"
           value={nome}
           onChange={e => setNome(e.target.value)}
         />
-
         <Input
           type="text"
           placeholder="Descrição:"
           value={descricao}
           onChange={e => setDescricao(e.target.value)}
         />
-
         <Select
           value={tipoMedida}
           onChange={e => setTipoMedida(e.target.value)}
@@ -238,7 +231,6 @@ function Cadastro() {
           Cadastrar
         </Cadastrar>
       </GridEsquerda>
-
       <GridDireita />
     </PrincipalContainer>
   );
