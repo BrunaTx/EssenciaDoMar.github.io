@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavigationBar from '../../components/NavigationBar';
 import ProductModal from '../../components/ProductModal';
 import CartModal from '../../components/CartModal';
@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle';
 import { Modal } from 'bootstrap';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const GlobalStyle = styled.div`
   @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
@@ -104,7 +105,8 @@ const Tabela = () => {
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
   const [produtoSelecionadoParaInfo, setProdutoSelecionadoParaInfo] = useState(null);
   const [quantidade, setQuantidade] = useState('');
-
+  const location = useLocation();
+  const navigate = useNavigate();
   const [carrinho, setCarrinho] = useState([]);
   const [filtro, setFiltro] = useState('');
 
@@ -114,6 +116,22 @@ const Tabela = () => {
     { id: 2, produto: 'Sabonete Artesanal', preco: 'R$ 15,00', estoque: '2 Kg' },
     { id: 3, produto: 'Vela Aromática', preco: 'R$ 20,00', estoque: '10 unidades' },
   ]);
+
+  useEffect(() => {
+    if (location.state && location.state.novoProduto) {
+      const novo = location.state.novoProduto;
+      // criar o objeto no formato da tabela
+      const produtoFormatado = {
+        id: novo.id,
+        produto: novo.nome,
+        preco: `R$ ${novo.preco.toFixed(2).replace('.', ',')}`,
+        estoque: novo.quantidade + (novo.quantidade % 1 === 0 ? ' unidades' : ' Kg')
+      };
+      setTasks(prev => [...prev, produtoFormatado]);
+
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state]);
 
   const removerAcentos = (texto) =>
     texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -211,6 +229,10 @@ const Tabela = () => {
       <td>
         <BotaoAcao onClick={() => alert(`Editar: ${task.produto}`)} title="Editar">
           <span className="material-symbols-outlined">edit</span>
+        </BotaoAcao>
+
+        <BotaoAcao onClick={() => alert(`Deletar: ${task.produto}`)} title="Deletar">
+          <span className="material-symbols-outlined">delete</span>
         </BotaoAcao>
 
         <BotaoAcao onClick={() => mostrarMaisInfo(task)} title="Info">

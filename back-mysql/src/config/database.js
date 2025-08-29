@@ -1,25 +1,24 @@
 const { Sequelize } = require('sequelize');
+require('dotenv').config();
 
-// Configuração da conexão com MySQL
 const sequelize = new Sequelize(
-  process.env.DB_NAME || 'crud_app',
-  process.env.DB_USER || 'crud_user',
-  process.env.DB_PASSWORD || 'crud_password',
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
   {
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 3306,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
     dialect: 'mysql',
     logging: process.env.NODE_ENV === 'development' ? console.log : false,
     pool: {
-      max: 5,      // número máximo de conexões
-      min: 0,      // número mínimo de conexões
-      acquire: 30000, // tempo máximo para uma conexão
-      idle: 10000  // tempo máximo de uma conexão ociosa
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
     },
     define: {
-      timestamps: true,       // cria colunas createdAt e updatedAt
-      underscored: false,     // formato colunas: snake_case ou camelCase
-      freezeTableName: true   // pluralização automática nome das tabelas
+      timestamps: true,
+      freezeTableName: true
     }
   }
 );
@@ -30,9 +29,12 @@ const connectDB = async () => {
     console.log('✅ Conexão com MySQL estabelecida com sucesso.');
 
     // Sincronizar modelos com o banco de dados
+    // force: true → recria tabelas se necessário (apagar depois de testar)
     await sequelize.sync({
-      force: false, // Não recriar tabelas se já existirem
-      alter: process.env.NODE_ENV === 'development' // Alterar estrutura apenas em desenvolvimento
+      alter: true,
+      force: false,      // não apaga dados existentes
+      // colocar true apenas na primeira vez para criar a tabela
+      alter: process.env.NODE_ENV === 'development'
     });
 
     console.log('✅ Modelos sincronizados com o banco de dados.');

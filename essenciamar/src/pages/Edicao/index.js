@@ -106,12 +106,12 @@
 //       setNome(produto.produto);
 //       setDescricao(produto.descricao);
 
-//       if (produto.estoque.includes('unidades')) {
+//       if (produto.quantidade.includes('unidades')) {
 //         setTipoMedida('unidade');
-//         setQuantidadeUnidade(produto.estoque.replace(' unidades', ''));
+//         setQuantidadeUnidade(produto.quantidade.replace(' unidades', ''));
 //       } else {
 //         setTipoMedida('kg');
-//         setPesoKg(produto.estoque.replace(' Kg', ''));
+//         setPesoKg(produto.quantidade.replace(' Kg', ''));
 //       }
 //     }
 //   }, [location.state]);
@@ -141,7 +141,7 @@
 //       produto: nome,
 //       preco: `R$ ${precoNumero.toFixed(2).replace('.', ',')}`,
 //       descricao,
-//       estoque:
+//       quantidade:
 //         tipoMedida === 'unidade' ? `${quantidadeUnidade} unidades` : `${pesoKg} Kg`,
 //     };
 

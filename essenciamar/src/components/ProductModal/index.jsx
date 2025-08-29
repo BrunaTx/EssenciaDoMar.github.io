@@ -17,7 +17,7 @@ const ProductModal = ({ produto }) => {
               <div className="product-descricao-container">
                 <p><strong>Produto:</strong> {produto.produto}</p>
                 <p><strong>Preço:</strong> {produto.preco}</p>
-                <p><strong>Estoque:</strong> {produto.estoque}</p>
+                <p><strong>Quantidade:</strong> {produto.quantidade}</p>
                 <p><strong>Descrição:</strong></p>
                 <p>{produto.descricao}</p>
               </div>

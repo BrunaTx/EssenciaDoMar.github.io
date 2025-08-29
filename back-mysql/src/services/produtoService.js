@@ -1,26 +1,29 @@
 const produtoRepository = require("../repositories/produtoRepository");
-const { ValidationError, UniqueConstraintError } = require('sequelize');
+const { ValidationError, UniqueConstraintError } = require("sequelize");
 
 class ProdutoService {
+  // Criar produto
   async createProduto(produtoData) {
     try {
       // Validação básica
-      if (!produtoData.nome || produtoData.preco == null || produtoData.estoque == null) {
-        throw new Error("Nome, preço e estoque são obrigatórios.");
+      if (!produtoData.nome || produtoData.preco == null || produtoData.quantidade == null) {
+        throw new Error("Nome, preço quantidade são obrigatórios.");
       }
 
-      // Verificar se o nome do produto já existe
+      // Verificar duplicidade pelo nome
       const existingProduto = await produtoRepository.findByNome(produtoData.nome);
       if (existingProduto) {
         throw new Error("Nome do produto já está em uso.");
       }
 
+      // Criar
       return await produtoRepository.create(produtoData);
+
     } catch (error) {
-      // Tratar erros específicos do Sequelize
+      // Tratamento de erros do Sequelize
       if (error instanceof ValidationError) {
         const messages = error.errors.map(err => err.message);
-        throw new Error(messages.join('. '));
+        throw new Error(messages.join(". "));
       }
       if (error instanceof UniqueConstraintError) {
         throw new Error("Nome do produto já está em uso.");
@@ -29,6 +32,7 @@ class ProdutoService {
     }
   }
 
+  // Buscar todos os produtos (com paginação opcional)
   async getAllProdutos(options = {}) {
     try {
       const { page, limit } = options;
@@ -36,7 +40,7 @@ class ProdutoService {
         const offset = (page - 1) * limit;
         return await produtoRepository.findAndCountAll({
           limit: parseInt(limit),
-          offset: parseInt(offset)
+          offset: parseInt(offset),
         });
       }
       return await produtoRepository.findAll();
@@ -45,6 +49,7 @@ class ProdutoService {
     }
   }
 
+  // Buscar por ID
   async getProdutoById(id) {
     try {
       if (!id || isNaN(id)) {
@@ -60,17 +65,18 @@ class ProdutoService {
     }
   }
 
+  // Atualizar
   async updateProduto(id, produtoData) {
     try {
       if (!id || isNaN(id)) {
         throw new Error("ID de produto inválido.");
       }
 
-      if (!produtoData.nome && produtoData.preco == null && produtoData.estoque == null) {
-        throw new Error("Pelo menos um campo (nome, preço ou estoque) deve ser fornecido para atualização.");
+      if (!produtoData.nome && produtoData.preco == null && produtoData.quantidade == null) {
+        throw new Error("Pelo menos um campo (nome, preço e quantidade) deve ser fornecido.");
       }
 
-      // Se está atualizando o nome, verificar se já existe
+      // Se está mudando o nome, verificar duplicidade
       if (produtoData.nome) {
         const existingProduto = await produtoRepository.findByNome(produtoData.nome);
         if (existingProduto && existingProduto.id !== parseInt(id)) {
@@ -84,10 +90,11 @@ class ProdutoService {
       }
 
       return updatedProduto;
+
     } catch (error) {
       if (error instanceof ValidationError) {
         const messages = error.errors.map(err => err.message);
-        throw new Error(messages.join('. '));
+        throw new Error(messages.join(". "));
       }
       if (error instanceof UniqueConstraintError) {
         throw new Error("Nome do produto já está em uso por outro produto.");
@@ -96,6 +103,7 @@ class ProdutoService {
     }
   }
 
+  // Deletar
   async deleteProduto(id) {
     try {
       if (!id || isNaN(id)) {
@@ -108,11 +116,13 @@ class ProdutoService {
       }
 
       return { message: "Produto deletado com sucesso." };
+
     } catch (error) {
       throw error;
     }
   }
 
+  // Contar
   async getProdutosCount() {
     try {
       return await produtoRepository.count();
@@ -121,9 +131,10 @@ class ProdutoService {
     }
   }
 
+  // Buscar por termo
   async searchProdutos(searchTerm, options = {}) {
     try {
-      if (!searchTerm || searchTerm.trim() === '') {
+      if (!searchTerm || searchTerm.trim() === "") {
         throw new Error("Termo de busca é obrigatório.");
       }
 

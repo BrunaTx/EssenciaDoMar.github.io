@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
+const { DataTypes } = require('sequelize');
 
 const Produto = sequelize.define('Produto', {
   id: {
@@ -8,62 +8,40 @@ const Produto = sequelize.define('Produto', {
     autoIncrement: true
   },
   nome: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.STRING(100),
     allowNull: false,
     validate: {
-      notEmpty: {
-        msg: 'Nome do produto é obrigatório'
-      },
-      len: {
-        args: [2, 50],
-        msg: 'Nome do produto deve ter entre 2 e 50 caracteres'
-      }
+      notEmpty: { msg: 'Nome do produto é obrigatório' },
+      len: { args: [1, 100], msg: 'Nome do produto deve ter entre 1 e 100 caracteres' }
     }
   },
   descricao: {
-    type: DataTypes.STRING(255),
+    type: DataTypes.STRING(1000),
     allowNull: true,
     validate: {
-      len: {
-        args: [0, 255],
-        msg: 'Descrição deve ter no máximo 255 caracteres'
-      }
+      len: { args: [0, 1000], msg: 'Descrição deve ter no máximo 1000 caracteres' }
     }
   },
   preco: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
     validate: {
-      isDecimal: {
-        msg: 'Preço deve ser um número decimal'
-      },
-      min: {
-        args: [0],
-        msg: 'Preço não pode ser negativo'
-      }
+      isDecimal: { msg: 'Preço deve ser um número decimal' },
+      min: { args: [0], msg: 'Preço não pode ser negativo' }
     }
   },
-  estoque: {
-    type: DataTypes.INTEGER,
+  quantidade: {
+    type: DataTypes.DECIMAL(10, 3), // aceita unidades inteiras ou kg com 3 casas decimais
     allowNull: false,
     validate: {
-      isInt: {
-        msg: 'Estoque deve ser um número inteiro'
-      },
-      min: {
-        args: [0],
-        msg: 'Estoque não pode ser negativo'
-      }
+      min: { args: [0], msg: 'Quantidade não pode ser negativa' }
     }
   }
 }, {
   tableName: 'produtos',
-  timestamps: true, // Adiciona createdAt e updatedAt
+  timestamps: true,
   indexes: [
-    {
-      unique: true,
-      fields: ['nome']
-    }
+    { unique: true, fields: ['nome'] }
   ]
 });
 
